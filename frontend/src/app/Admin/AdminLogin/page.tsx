@@ -1,12 +1,10 @@
-// Login.jsx
 'use client'
 import React, { useState } from 'react';
-import styles from './login-page.module.css';
+import styles from './admin-login.module.css';
 import Image from 'next/image';
 import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
 import Swal from 'sweetalert2';
-import Link from 'next/link';
 
 
 const LOGIN_USER = gql`
@@ -71,7 +69,7 @@ const Login = () => {
             alt="Welcome Car"
           />
         </div>
-        <span className={styles.logintext}>Login</span>
+        <span className={styles.logintext}>Administrator Login</span>
         <form className={styles.inputfields} onSubmit={handleLogin}>
           <input
             type="email"
@@ -93,13 +91,7 @@ const Login = () => {
             {loading ? 'Logging in...' : 'Login'}
           </button>
           {error && <p className={styles.error}>{error.message}</p>}
-          <p className={styles.registertext}>Do not have an account?</p>
-          <Link href="/Auth/Register" legacyBehavior passHref>
-            <p className={styles.registerlink}>Register</p>
-          </Link>
-          <Link href="/Admin/AdminLogin" legacyBehavior passHref>
-            <p className={styles.isadmin}>Login as administrator</p>
-          </Link>
+          
         </form>
       </div>
     </div>

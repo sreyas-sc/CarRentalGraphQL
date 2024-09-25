@@ -7,9 +7,9 @@ function Footer() {
 
   // socail media link with images
   const socialLinks = [
-    { id: 1, name: "facebook", imgUrl: 'icons/facebook-icon.svg', url: '' },
-    { id: 3, name: "Instagram", imgUrl: 'icons/insta-icon.svg', url: '' },
-    { id: 5, name: "Youtube", imgUrl: 'icons/youtube-icon.svg', url: '' }
+    { id: 1, name: "facebook", imgUrl: '/icons/facebook-icon.svg', url: '' },
+    { id: 3, name: "Instagram", imgUrl: '/icons/insta-icon.svg', url: '' },
+    { id: 5, name: "Youtube", imgUrl: '/icons/youtube-icon.svg', url: '' }
   ]
 
   return (
@@ -68,7 +68,7 @@ function Footer() {
             <div className={styles.col1}>
               <Image
                 id="companylogoFooter"
-                src="icons\brand-logo.svg"
+                src="/icons/brand-icon-blue.svg"
                 alt=""
                 width={120}
                 height={140}

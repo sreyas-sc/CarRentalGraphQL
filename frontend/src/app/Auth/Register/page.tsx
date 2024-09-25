@@ -5,6 +5,7 @@ import styles from './register-page.module.css';
 import Image from 'next/image';
 import { useMutation } from '@apollo/client'; 
 import { REGISTER_MUTATION } from '@/graphql/mutations';  // Ensure this points to the correct mutation file
+import Link from 'next/link';
 
 const Register = () => {
   const [register, { loading }] = useMutation(REGISTER_MUTATION);  // Use REGISTER_MUTATION with useMutation
@@ -118,7 +119,9 @@ const Register = () => {
               {loading ? 'Registering...' : 'Register'}
             </button>
             <p className={styles.logintext}>Do not have an account?</p>
-            <p className={styles.loginlink}>Login</p>
+            <Link href="/Auth/Login" legacyBehavior passHref>
+              <p className={styles.loginlink}>Login</p>
+            </Link>
           </div>
         </form>
       </div>

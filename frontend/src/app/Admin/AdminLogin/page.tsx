@@ -36,7 +36,7 @@ const LoginAdmin = () => {
         title: 'Login Successful',
         text: 'Welcome back!',
       }).then(() => {
-        window.location.href = '/'; // Adjust the redirect path as needed
+        window.location.href = '/Admin/DashBoard'; // Adjust the redirect path as needed
       });
     } catch (err) {
       console.error(err);

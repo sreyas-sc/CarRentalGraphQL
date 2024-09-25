@@ -21,6 +21,23 @@ const adminResolvers = {
                 password : hashedPassword,
             });
         },
+
+        loginAdmin: async (_, { email, password }) => {
+            const admin = await Admin.findOne({ where: { email } });
+
+            if (!admin) {
+                throw new Error('Admin not found');  // Throw an error instead of returning null
+            }
+
+            const isMatch = await bcrypt.compare(password, admin.password);
+
+            if (!isMatch) {
+                throw new Error('Password does not match');  // Throw an error instead of returning null
+            }
+
+            const token = createToken(admin.id);
+            return { token, admin };  // Return both token and user information
+        }
     },
 };
 

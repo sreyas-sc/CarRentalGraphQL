@@ -2,26 +2,6 @@
 // The entry point of your application. This file sets up the Express server, initializes Apollo Server for handling GraphQL requests, connects to the PostgreSQL database using Sequelize, and starts listening for requests on a specified port.
 // import dotenv from 'dotenv'; // Import dotenv
 // dotenv.config(); // Load environment variables
-
-// import sequelize from './models/db.js'; // Import sequelize instance (default export)
-
-// // Initialize your app here
-// // For example, if you're using Express:
-// import express from 'express'; // Assuming you use express
-// const app = express();
-
-// // Your routes and middleware setup...
-
-// // Connect to the database
-// sequelize.authenticate()
-//     .then(() => console.log('Database connection established.'))
-//     .catch(err => console.error('Unable to connect to the database:', err));
-
-// // Start the server
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => {
-//     console.log(`Server is running on http://localhost:${PORT}`);
-// });
 import dotenv from 'dotenv'; // Import dotenv
 dotenv.config(); // Load environment variables
 

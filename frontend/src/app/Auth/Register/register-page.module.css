@@ -47,9 +47,17 @@
     justify-content: center;
   }
   .logintext{
-    font-size: 40px;
+    font-size: 12px;
     font-weight: 800;
     color: #b2b2b393;
+    margin-top: 10px;
+  }
+
+  .form{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 .inputfields{
   margin-top: 20px;
@@ -101,10 +109,6 @@
   background-color: rgb(29, 135, 234);
 }
 
-.logintext{
-  font-size: 12px;
-  margin-top: 10px;
-}
 
 .loginlink{
   margin-top: 0px;

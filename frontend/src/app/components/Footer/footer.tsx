@@ -18,24 +18,12 @@ function Footer() {
         <div className={styles.footerMobile}>
           <div className={styles.MediaLinks}>
             <Image
-              src="icons\brand-logo.svg"
+              src="/icons/brand-icon-blue.svg"
               height={46}
               width={113}
               alt="alhabtoor logo"
             />
-            <ul>
-              {socialLinks.map((item) => (
-                <li key={item.id}>
-                  <Link href={item.url}><Image className={styles.blackLogos}
-                    src={item.imgUrl}
-                    alt={item.name}
-                    width={17}
-                    height={17}
-                  /></Link>
-                </li>
-              ))}
-
-            </ul>
+    
           </div>
           <div className={styles.bottomNavigation}>
             <ul className={styles.navul}>
@@ -68,15 +56,6 @@ function Footer() {
               <li className={styles.first}>Automotive</li>
               <li>Vehicle Leasing</li>
             </ul>
-            <div className={styles.secureDiv}>
-              <Image
-                className={styles.secureImg}
-                src="icons\brand-logo.svg"
-                alt=""
-                width={59}
-                height={27}
-              />
-            </div>
           </div>
           <div className={styles.copyright}>
             <p>© 2023 Car rental LLC - All Rights Reserved. </p>

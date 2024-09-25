@@ -13,6 +13,9 @@ const userResolvers = {
     },
     Mutation: {
         register: async (_, { name, email, password, phone, city, country, state }) => {
+            console.log("the date from the database is ", name, email, password,  phone, city, country, state);
+
+
             const hashedPassword = await bcrypt.hash(password, 10);
             return await User.create({ 
                 name, 

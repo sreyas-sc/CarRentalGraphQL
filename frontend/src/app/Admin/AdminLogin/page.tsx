@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useState } from 'react';
 import styles from './admin-login.module.css';
 import Image from 'next/image';
@@ -6,49 +6,40 @@ import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
 import Swal from 'sweetalert2';
 
-
-const LOGIN_USER = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+const LOGIN_ADMIN = gql`
+  mutation LoginAdmin($email: String!, $password: String!) {
+    loginAdmin(email: $email, password: $password) {
       token
       user {
         id
-        name
         email
-        phone
-        city
-        country
-        state
       }
     }
   }
 `;
 
-const Login = () => {
+const LoginAdmin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loginUser, { loading, error }] = useMutation(LOGIN_USER);
+  const [loginAdmin, { loading, error }] = useMutation(LOGIN_ADMIN);
 
-  const handleLogin = async (e: any) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const { data } = await loginUser({ variables: { email, password } });
+      const { data } = await loginAdmin({ variables: { email, password } });
       // Store the token and user details in session storage
-      sessionStorage.setItem('token', data.login.token);
-      sessionStorage.setItem('user', JSON.stringify(data.login.user));
-      // Redirect or perform further actions upon successful login
+      sessionStorage.setItem('token', data.loginAdmin.token); // Updated to use loginAdmin
+      sessionStorage.setItem('user', JSON.stringify(data.loginAdmin.user)); // Updated to use loginAdmin
 
       Swal.fire({
         icon: 'success',
         title: 'Login Successful',
         text: 'Welcome back!',
       }).then(() => {
-        // Redirect or perform further actions upon successful login
         window.location.href = '/'; // Adjust the redirect path as needed
       });
     } catch (err) {
       console.error(err);
-      // Handle error (e.g., display a notification)
       Swal.fire({
         icon: 'error',
         title: 'Login Failed',
@@ -91,11 +82,10 @@ const Login = () => {
             {loading ? 'Logging in...' : 'Login'}
           </button>
           {error && <p className={styles.error}>{error.message}</p>}
-          
         </form>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default LoginAdmin;

@@ -9,7 +9,7 @@ const adminTypeDefs = gql`
         password: String!
     }
     
-    type AdminLoginResponse {  # New type for login response
+    type AdminLoginResponse {  
         token: String!
         user: Admin
     }
@@ -21,7 +21,7 @@ const adminTypeDefs = gql`
 
     extend type Mutation {
         registerAdmin(email: String!, password: String!): Admin!
-        loginAdmin(email: String!, password: String!): LoginResponse!
+        loginAdmin(email: String!, password: String!): AdminLoginResponse!
     }
 `;
 

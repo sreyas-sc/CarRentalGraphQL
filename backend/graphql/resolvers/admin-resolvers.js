@@ -36,7 +36,8 @@ const adminResolvers = {
             }
 
             const token = createToken(admin.id);
-            return { token, admin };  // Return both token and user information
+            // return { token, admin };  // Return both token and user information
+            return { token, user: admin }; // Return both token and user information
         }
     },
 };

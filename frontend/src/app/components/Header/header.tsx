@@ -4,28 +4,29 @@ import styles from "./header.module.css";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Swal from 'sweetalert2'; // Import SweetAlert2
 
 function Navbar() {
   const [isSidebarActive, setSidebarActive] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false); // State to check if user is admin
+  const [isUser, setIsUser] = useState<boolean>(false); // State to check if user is a regular user
   const router = useRouter();
 
   useEffect(() => {
-    // Function to check user data in session storage
     const checkUserData = () => {
       const userData = sessionStorage.getItem('user');
       if (userData) {
         const user = JSON.parse(userData);
         setIsAdmin(user.__typename === "Admin");
+        setIsUser(user.__typename === "User"); // Set user state based on __typename
       } else {
-        setIsAdmin(false); // Reset to false if no user data
+        setIsAdmin(false);
+        setIsUser(false); // Reset user state
       }
     };
 
-    checkUserData(); // Initial check
+    checkUserData();
 
-    // Optionally, you can add a listener to handle session changes
-    // This will automatically call checkUserData when session storage changes
     const handleStorageChange = () => {
       checkUserData();
     };
@@ -33,23 +34,33 @@ function Navbar() {
     window.addEventListener('storage', handleStorageChange);
 
     return () => {
-      window.removeEventListener('storage', handleStorageChange); // Cleanup listener
+      window.removeEventListener('storage', handleStorageChange);
     };
-  }, []); // Empty dependency array to run only on mount
+  }, []);
 
-  const handleLogout = () => {
-    // Clear session storage
-    sessionStorage.clear();
-    setIsAdmin(false); // Update state after logout
-    router.push('/'); // Redirect to home
+  const handleLogout = async () => {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You will be logged out of your account!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, logout!',
+      cancelButtonText: 'Cancel'
+    });
+
+    if (result.isConfirmed) {
+      // Clear session storage
+      sessionStorage.clear();
+      setIsAdmin(false); // Update state after logout
+      setIsUser(false); // Reset user state after logout
+      router.push('/'); // Redirect to home
+    }
   };
 
-  // Toggle sidebar visibility on burger click
   const handleBurgerClick = () => {
     setSidebarActive(true);
   };
 
-  // Close sidebar on close button click
   const handleCloseClick = () => {
     setSidebarActive(false);
   };
@@ -70,26 +81,34 @@ function Navbar() {
                 />
               </Link>
             </div>
-            {/* Navbar navigation links */}
             <div className={styles.navList}>
               <ul className={styles.navLinkList}>
-                {/* Only show Sign In and Sign Up buttons if not an admin */}
-                {!isAdmin ? (
+                {!isAdmin && !isUser ? (
                   <li className={`${styles.navLinkLi} ${styles.navLinkButtonLi}`} id="navLinkButtonLi">
                     <Link href="/Auth/Login" legacyBehavior passHref>
                       <button className={styles.siginInButton}>Sign in</button>
                     </Link>
-
                     <Link href="/Auth/Register" legacyBehavior passHref>
                       <button className={styles.signUpButton}>Sign Up</button>
                     </Link>
+                  </li>
+                ) : isUser ? (
+                  <li className={styles.navLinkLi}>
+                    <Link href="/RentACar" legacyBehavior passHref>
+                      <button className={styles.siginInButton}>Rent a Car</button>
+                    </Link>
+                    <Link href="/Profile" legacyBehavior passHref>
+                      <button className={styles.siginInButton}>Profile</button>
+                    </Link>
+                    <button onClick={handleLogout} className={styles.logoutButton}>
+                      Logout
+                    </button>
                   </li>
                 ) : (
                   <li className={styles.navLinkLi}>
                     <Link href="/Admin/DashBoard" legacyBehavior passHref>
                       <button className={styles.dashboardButton}>Dashboard</button>
                     </Link>
-
                     <button onClick={handleLogout} className={styles.logoutButton}>
                       Logout
                     </button>
@@ -105,7 +124,6 @@ function Navbar() {
           </div>
         </div>
 
-        {/* Sidebar */}
         <div className={`${styles.sideBar} ${isSidebarActive ? styles.sideBarActive : ""}`}>
           <div>
             <Image
@@ -118,12 +136,15 @@ function Navbar() {
             />
           </div>
 
-          {/* Drop down nav menu */}
           <div className={styles.dropNavMenu}>
-            {!isAdmin ? (
+            {!isAdmin && !isUser ? (
               <button className={styles.loginSignUpButton}>Login/Sign Up</button>
+            ) : isUser ? (
+              <Link href="/RentACar" passHref>
+                <button className={styles.loginSignUpButton}>Rent a Car</button>
+              </Link>
             ) : (
-              <Link href="/dashboard" passHref>
+              <Link href="/Admin/DashBoard" passHref>
                 <button className={styles.loginSignUpButton}>Dashboard</button>
               </Link>
             )}

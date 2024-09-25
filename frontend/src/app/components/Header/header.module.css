@@ -62,6 +62,25 @@
     border-radius: 10px;
     color: #ffff;
 }
+
+
+.dashboardButton{
+    padding: 10px 20px;
+    color: #000000;
+    font-size: 18px;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.dashboardButton:hover{
+    background-color: #3a78bb;
+    border-radius: 10px;
+    color: #ffff;
+    box-shadow: 2px 2px 4px rgba(50, 68, 91, 1.482);
+
+}
+
+
 .siginInButton:hover{
     background-color: #1572D3;
     border-radius: 10px;
@@ -174,6 +193,22 @@
 
 .loginSignUpButton:hover {
     background-color: rgb(70, 70, 70);
+}
+
+.logoutButton{
+    padding: 10px 20px;
+    color: #000000;
+    font-size: 18px;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.logoutButton:hover{
+    background-color: #f04444;
+    border-radius: 10px;
+    color: #ffff;
+    box-shadow: 2px 2px 4px rgba(50, 68, 91, 1.482);
+
 }
 
 .side-bar.active {

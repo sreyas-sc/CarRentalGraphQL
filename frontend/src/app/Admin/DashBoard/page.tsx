@@ -1,10 +1,10 @@
-
+// components/DashboardLayout.tsx
 import Image from 'next/image';
 import React, { ReactNode } from 'react';
 import Link from 'next/link';
-import styles from './admin-dashboard.module.css'; // Make sure the CSS module is properly scoped
+import styles from './admin-dashboard.module.css';
 
-// Define types for layout props (useful for TypeScript)
+// Define types for layout props
 interface DashboardLayoutProps {
   children: ReactNode;
 }
@@ -29,13 +29,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           <Link href="/" passHref>
             <button className={styles.dashButton}>Home</button>
           </Link>
-          <Link href="/add-vehicles" passHref>
+          <Link href="/Admin/AddCars" passHref>
             <button className={styles.dashButton}>Add Vehicles</button>
           </Link>
           <Link href="/add-rentable-vehicles" passHref>
             <button className={styles.dashButton}>Add Rentable Vehicles</button>
           </Link>
-          <Link href="/view-bookings" passHref>
+          <Link href="/Admin/ViewBookings" passHref>
             <button className={styles.dashButton}>View Bookings</button>
           </Link>
         </div>
@@ -48,7 +48,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
       {/* Main Content */}
       <div className={styles.right}>
-        {children} {/* This renders the page content */}
+        {children} {/* This renders the page-specific content */}
       </div>
     </div>
   );

@@ -25,7 +25,7 @@
 
 .left:hover{
     border: 1px solid rgba(20, 114, 222, 0.644);
-    box-shadow: 2px 2px 4px rgba(50, 68, 91, 1.482);
+    box-shadow: 11px 12px 15px 4px rgba(29, 37, 46, 0.482);
 }
 .companylogo{
 
@@ -95,5 +95,8 @@
     width: 80%;
     min-height: 100vh;
     display: flex;
+    /* align-items: center; */
+    margin: auto;
+    justify-content: center;
     /* border: 1px solid red; */
 }

@@ -87,6 +87,7 @@ const AddRentableVehicles = () => {
             ))}
           </select>
         </div>
+        {/* Model dropdown */}
         <div>
           <select
             name="vehicleModel"
@@ -103,6 +104,7 @@ const AddRentableVehicles = () => {
             ))}
           </select>
         </div>
+        {/* Year dropdown */}
         <div>
           <select
             name="vehicleYear"
@@ -121,6 +123,22 @@ const AddRentableVehicles = () => {
               ))}
           </select>
         </div>
+        {/* Description textarea */}
+        <div>
+            <textarea placeholder='Description' className={styles.description} />
+        </div>
+        <div className={styles.priceContainer}>
+          <span className={styles.currencySymbol}>₹</span>
+          <input
+            type="number"
+            name="price"
+            placeholder='Price'
+            className={styles.price}
+          />
+        </div>
+        <input placeholder='Quantity' type='number' max={10} className={styles.quantity} />
+
+
         <button type="submit" className={styles.submitbutton}>Add Car</button>
       </form>
     </div>

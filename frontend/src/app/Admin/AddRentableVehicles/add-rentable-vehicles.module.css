@@ -47,6 +47,87 @@
     opacity: 0.3; /* Make sure the placeholder color is not faded (optional) */
   }
 
+.description{
+    color: black; 
+    background-color: rgba(255, 255, 255, 1);
+    max-width: 100%;
+    min-width: 300px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.5); 
+    padding: 10px; 
+    min-height: 100px;
+    max-width: 300px;
+    max-height: 150px;
+}
+
+.description:focus {
+    outline: none; /* Remove default outline */
+    border: 2px solid #007BFF; /* Highlight border on focus */
+}
+
+.description::placeholder {
+    color: #aaa; /* Light gray color for the placeholder */
+    opacity: 1;  /* Full opacity */
+}
+
+.priceContainer {
+    position: relative; /* Position relative for positioning currency symbol */
+  }
+
+  .currencySymbol {
+    position: absolute;
+    color: black;
+    left: 10px; /* Adjust based on your design */
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%); /* Adjust for better vertical alignment */
+    font-size: 16px; /* Adjust size as needed */
+  }
+
+.price{
+    color: black; 
+    background-color: rgba(255, 255, 255, 1);
+    max-width: 100%;
+    min-width: 300px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.5); 
+    padding-left: 40px;
+}
+
+.price::placeholder {
+    color: #aaa; /* Light gray color for the placeholder */
+    opacity: 1;  /* Full opacity */
+    /* padding-left: 10px; */
+}
+
+.price:focus {
+    outline: none; /* Remove default outline */
+    border: 2px solid #007BFF; /* Highlight border on focus */
+}
+
+.quantity{
+    color: black; 
+    background-color: rgba(255, 255, 255, 1);
+    max-width: 100%;
+    min-width: 300px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.5); 
+    padding-left: 10px;
+}
+
+.quantity:focus {
+    outline: none; 
+    border: 2px solid #007BFF; /* Highlight border on focus */
+}
+
+.quantity::placeholder {
+    color: #aaa; /* Light gray color for the placeholder */
+    opacity: 1;  /* Full opacity */
+    /* padding-left: 10px; */
+}
+
 .submitbutton{
     width: 20%;
     padding: 10px;

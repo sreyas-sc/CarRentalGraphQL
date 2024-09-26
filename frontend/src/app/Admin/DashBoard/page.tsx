@@ -32,7 +32,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           <Link href="/Admin/AddCars" passHref>
             <button className={styles.dashButton}>Add Vehicles</button>
           </Link>
-          <Link href="/add-rentable-vehicles" passHref>
+          <Link href="/Admin/AddRentableVehicles" passHref>
             <button className={styles.dashButton}>Add Rentable Vehicles</button>
           </Link>
           <Link href="/Admin/ViewBookings" passHref>

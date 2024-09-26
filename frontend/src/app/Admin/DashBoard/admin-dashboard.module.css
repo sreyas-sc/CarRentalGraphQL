@@ -1,6 +1,5 @@
 .container{
     width: 100%;
-    /* padding: 20px; */
     min-height: 100vh;
     display: flex;
     flex-direction: row;
@@ -9,8 +8,6 @@
 }
 
 .left{
-    /* align-items: center; */
-    /* justify-content: center; */
     width: 20%;
     min-height: 100vh;
     display: flex;
@@ -31,7 +28,6 @@
 
     padding: 20px;
     display: flex;
-    /* width: 20%; */
 }
 
 .dashboardbuttons{
@@ -62,7 +58,7 @@
     width: 90%;
     padding: 10px;
     margin: 10px;
-    background-color: #6367b455;
+    background-color: #ff040069;
     border: none;
     border-radius: 10px;
 }
@@ -91,12 +87,9 @@
 
 
 .right{
-    /* background-color: aliceblue; */
     width: 80%;
     min-height: 100vh;
     display: flex;
-    /* align-items: center; */
     margin: auto;
     justify-content: center;
-    /* border: 1px solid red; */
 }

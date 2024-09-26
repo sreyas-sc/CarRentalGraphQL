@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import { createToken } from '../../utils/createToken.js';
 import Admin from '../../models/admin-model.js';
 import Vehicle from '../../models/vehicle-model.js';
+import RentableVehicle from '../../models/rentable-vehicle-model.js';
 // import { sequelize } from '../../config/database.js'; 
 import sequelize from '../../models/db.js';
 
@@ -67,6 +68,37 @@ const adminResolvers = {
             });
         },
 
+        addRentableVehicle: async (_, { make, model, year, price, quantity, description, primaryImageUrl, additionalImageUrls }) => {
+            try {
+                // Create the RentableVehicle
+                const vehicle = await RentableVehicle.create({
+                    make,
+                    model,
+                    year,
+                    price,
+                    quantity,
+                    description,
+                    primaryImageUrl,
+                    additionalImageUrls,
+                });
+
+                // Return the created vehicle details
+                return {
+                    id: vehicle.id,
+                    make: vehicle.make,
+                    model: vehicle.model,
+                    year: vehicle.year,
+                    price: vehicle.price,
+                    quantity: vehicle.quantity,
+                    description: vehicle.description,
+                    primaryImageUrl: vehicle.primaryImageUrl,
+                    additionalImageUrls: vehicle.additionalImageUrls,
+                };
+            } catch (error) {
+                console.error('Error adding rentable vehicle:', error);
+                throw new Error('Failed to add rentable vehicle'); // Handle the error appropriately
+            }
+        },
 
         // Admin Login
         loginAdmin: async (_, { email, password }) => {

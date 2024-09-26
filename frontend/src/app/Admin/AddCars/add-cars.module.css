@@ -51,6 +51,28 @@
 
 }
 
+.suggestions {
+    position: absolute;
+    color: black;
+    margin-left:10px ;
+    background-color: rgba(255, 255, 255, 0.217);
+    border: 1px solid #ccc;
+    list-style: none;
+    max-height: 150px; /* Limit height of dropdown */
+    overflow-y: auto; /* Scroll if too many suggestions */
+    width: 25%; /* Match input field width */
+    z-index: 1000; /* Ensure it's on top */
+  }
+  
+  .suggestionItem {
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .suggestionItem:hover {
+    background-color: #f0f0f0; /* Highlight on hover */
+  }
+
 .submitbutton:hover{
     width: 22%;
     padding: 10px;

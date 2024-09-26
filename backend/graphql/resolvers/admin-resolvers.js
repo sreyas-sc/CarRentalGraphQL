@@ -4,6 +4,7 @@
 import bcrypt from 'bcrypt';
 import { createToken } from '../../utils/createToken.js';
 import Admin from '../../models/admin-model.js';
+import Vehicle from '../../models/vehicle-model.js';
 
 
 const adminResolvers = {
@@ -14,6 +15,8 @@ const adminResolvers = {
     },
 
     Mutation: {
+
+        // Admin Registration
         registerAdmin: async (_, { email, password }) => {
             const hashedPassword = await bcrypt.hash(password, 10);
             return await Admin.create({ 
@@ -22,6 +25,16 @@ const adminResolvers = {
             });
         },
 
+        addVehicle: async (_, { make, model, year }) => {
+            return await Vehicle.create({ 
+                make, 
+                model,
+                year
+            });
+        },
+
+
+        // Admin Login
         loginAdmin: async (_, { email, password }) => {
             const admin = await Admin.findOne({ where: { email } });
 
@@ -36,7 +49,6 @@ const adminResolvers = {
             }
 
             const token = createToken(admin.id);
-            // return { token, admin };  // Return both token and user information
             return { token, user: admin }; // Return both token and user information
         }
     },

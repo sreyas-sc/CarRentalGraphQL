@@ -9,3 +9,14 @@ export const REGISTER_MUTATION = gql`
     }
   }
 `;
+
+export const ADD_VEHICLE_MUTATION = gql`
+  mutation AddVehicle($make: String!, $model: String!, $year: String!) {
+    addVehicle(make: $make, model: $model, year: $year) {
+      id
+      make
+      model
+      year
+    }
+  }
+`;

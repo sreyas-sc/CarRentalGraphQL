@@ -11,6 +11,8 @@ const HowItWork = () => {
       '/icons/volvo-icon.svg',
       '/icons/audi-icon.svg',
       '/icons/acura-icon.svg',
+      '/icons/lexus-logo.png',
+      '/icons/marcedes-logo.png'
     ];
 
   return (

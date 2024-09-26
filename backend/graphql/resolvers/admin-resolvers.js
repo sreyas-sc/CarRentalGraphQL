@@ -5,13 +5,47 @@ import bcrypt from 'bcrypt';
 import { createToken } from '../../utils/createToken.js';
 import Admin from '../../models/admin-model.js';
 import Vehicle from '../../models/vehicle-model.js';
-
+// import { sequelize } from '../../config/database.js'; 
+import sequelize from '../../models/db.js';
 
 const adminResolvers = {
     Query: {
+
+        // Get the admin details
         getAllAdmins: async () => {
             return await Admin.findAll();
         },
+
+        // get all the vehicle makes(brands)
+        getAllMakes: async () => {
+            // Fetch distinct makes from the Vehicle model
+            return await Vehicle.findAll({
+                attributes: [[sequelize.fn('DISTINCT', sequelize.col('make')), 'make']],
+                raw: true,  // To get raw results without instance methods
+            }).then(results => results.map(result => result.make)); // Extracting makes
+        },
+
+        // Get all the models of the selected make
+        getModelsByMake: async (_, { make }) => {
+            // Fetch models based on the selected make
+            return await Vehicle.findAll({ 
+                attributes: ['model', 'year'], 
+                where: { make } 
+            });
+        },
+
+        // New Query: Get Vehicle by Make and Model
+        getVehicleByMakeAndModel: async (_, { make, model }) => {
+            // Fetch a vehicle that matches the given make and model
+            const vehicle = await Vehicle.findOne({ 
+                where: { make, model } 
+            });
+            if (!vehicle) {
+                throw new Error('Vehicle not found'); // Handle case where no vehicle is found
+            }
+            return vehicle; // Return the vehicle details
+        },
+
     },
 
     Mutation: {

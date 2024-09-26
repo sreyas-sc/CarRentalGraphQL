@@ -20,3 +20,18 @@ export const ADD_VEHICLE_MUTATION = gql`
     }
   }
 `;
+
+export const GET_ALL_MAKES = gql`
+  query GetAllMakes {
+    getAllMakes
+  }
+`;
+
+export const GET_MODELS_BY_MAKE = gql`
+  query GetModelsByMake($make: String!) {
+    getModelsByMake(make: $make) {
+      model
+      year
+    }
+  }
+`;

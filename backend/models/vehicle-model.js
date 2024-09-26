@@ -10,7 +10,7 @@ const Vehicle = sequelize.define('Vehicle', {
     make: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        unique: false,
     },
     model: {
         type: DataTypes.STRING,

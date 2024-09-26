@@ -11,20 +11,19 @@ const AddRentableVehicles = () => {
   const [selectedMake, setSelectedMake] = useState<string>('');
   const [selectedModel, setSelectedModel] = useState<string>('');
   const [selectedYear, setSelectedYear] = useState<string>('');
+  const [quantity, setQuantity] = useState<number>(1);
 
-  const [getMakes, { loading: loadingMakes, error: errorMakes }] = useLazyQuery(GET_ALL_MAKES, {
-    onCompleted: (data) => {
-      console.log('Fetched Makes:', data.getAllMakes);
-      setMakes(data.getAllMakes);
-    }
+  // States for primary and additional images
+  const [primaryImage, setPrimaryImage] = useState<File | null>(null);
+  const [additionalImages, setAdditionalImages] = useState<File[]>([]);
+
+  const [getMakes] = useLazyQuery(GET_ALL_MAKES, {
+    onCompleted: (data) => setMakes(data.getAllMakes),
   });
 
-  const [getModels, { loading: loadingModels, error: errorModels }] = useLazyQuery(GET_MODELS_BY_MAKE, {
+  const [getModels] = useLazyQuery(GET_MODELS_BY_MAKE, {
     variables: { make: selectedMake },
-    onCompleted: (data) => {
-      console.log('Fetched Models for Make:', selectedMake, data.getModelsByMake);
-      setModels(data.getModelsByMake);
-    }
+    onCompleted: (data) => setModels(data.getModelsByMake),
   });
 
   const [addVehicle] = useMutation(ADD_VEHICLE_MUTATION);
@@ -39,6 +38,7 @@ const AddRentableVehicles = () => {
     }
   }, [selectedMake, getModels]);
 
+  // Handle adding vehicle
   const handleAddVehicle = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -47,6 +47,7 @@ const AddRentableVehicles = () => {
           make: selectedMake,
           model: selectedModel,
           year: selectedYear,
+          // Image upload handling can be integrated here
         },
       });
       alert('Vehicle added successfully!');
@@ -54,24 +55,45 @@ const AddRentableVehicles = () => {
       setSelectedMake('');
       setSelectedModel('');
       setSelectedYear('');
+      setPrimaryImage(null);
+      setAdditionalImages([]);
     } catch (err) {
       console.error(err);
       alert('Failed to add vehicle');
     }
   };
 
-  // Log loading states and errors
-  useEffect(() => {
-    if (loadingMakes) console.log('Loading Makes...');
-    if (errorMakes) console.error('Error fetching Makes:', errorMakes);
-    if (loadingModels) console.log('Loading Models...');
-    if (errorModels) console.error('Error fetching Models:', errorModels);
-  }, [loadingMakes, errorMakes, loadingModels, errorModels]);
+  // Handle file change for primary image
+  const handlePrimaryImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setPrimaryImage(e.target.files[0]);
+    }
+  };
+
+  // Handle adding additional images
+  const handleAdditionalImageChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const updatedImages = [...additionalImages];
+      updatedImages[index] = e.target.files[0];
+      setAdditionalImages(updatedImages);
+    }
+  };
+
+  // Handle adding new image input field
+  const handleAddImageField = () => {
+    setAdditionalImages([...additionalImages, new File([], '')]);
+  };
+
+
+  const handleQuantityChange = (amount: number) => {
+    setQuantity((prev) => Math.max(1, Math.min(10, prev + amount))); // Keep between 1 and 10
+  };
 
   return (
     <div className={styles.container}>
       <h1 className={styles.header}>Add Rentable Cars</h1>
       <form className={styles.form} onSubmit={handleAddVehicle}>
+        {/* Vehicle Make Dropdown */}
         <div>
           <select
             name="vehicleMake"
@@ -87,7 +109,8 @@ const AddRentableVehicles = () => {
             ))}
           </select>
         </div>
-        {/* Model dropdown */}
+
+        {/* Model Dropdown */}
         <div>
           <select
             name="vehicleModel"
@@ -104,7 +127,8 @@ const AddRentableVehicles = () => {
             ))}
           </select>
         </div>
-        {/* Year dropdown */}
+
+        {/* Year Dropdown */}
         <div>
           <select
             name="vehicleYear"
@@ -123,22 +147,70 @@ const AddRentableVehicles = () => {
               ))}
           </select>
         </div>
-        {/* Description textarea */}
+
+        {/* Description Textarea */}
         <div>
-            <textarea placeholder='Description' className={styles.description} />
+          <textarea placeholder='Description' className={styles.description} />
         </div>
+
+        {/* Price Input */}
         <div className={styles.priceContainer}>
           <span className={styles.currencySymbol}>₹</span>
-          <input
-            type="number"
-            name="price"
-            placeholder='Price'
-            className={styles.price}
-          />
+          <input type="number" name="price" placeholder='Price' className={styles.price} />
         </div>
-        <input placeholder='Quantity' type='number' max={10} className={styles.quantity} />
+
+        {/* Quantity Input */}
+        <label>Quantity</label>
+
+        {/* Quantity Selector */}
+        <div className={styles.quantityContainer}>
+          <button
+            type="button"
+            className={styles.quantityButtonMinus}
+            onClick={() => handleQuantityChange(-1)}
+          >
+            -
+          </button>
+          <input
+            type="text"
+            value={quantity}
+            readOnly
+            className={styles.quantityDisplay}
+          />
+          <button
+            type="button"
+            className={styles.quantityButton}
+            onClick={() => handleQuantityChange(1)}
+          >
+            +
+          </button>
+        </div>
 
 
+        {/* Primary Image Picker */}
+        <label>Primary Image:</label>
+        <div className={styles.imagePicker}>
+          <input type="file" accept="image/*" onChange={handlePrimaryImageChange} />
+        </div>
+
+        {/* Multiple Images Input */}
+        <div className={styles.imagePicker}>
+          <label>Additional Images:</label>
+          {additionalImages.map((_, index) => (
+            <div key={index}>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleAdditionalImageChange(e, index)}
+              />
+            </div>
+          ))}
+          <button type="button" onClick={handleAddImageField} className={styles.addImageButton}>
+            Add More Images
+          </button>
+        </div>
+
+        {/* Submit Button */}
         <button type="submit" className={styles.submitbutton}>Add Car</button>
       </form>
     </div>

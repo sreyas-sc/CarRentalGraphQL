@@ -61,6 +61,8 @@ const adminTypeDefs = gql`
         make: String!
         model: String!
         year: String!
+        createdAt: String!
+        updatedAt: String!
     }
 
     type RentableVehicle {
@@ -90,6 +92,7 @@ const adminTypeDefs = gql`
         getAllMakes: [String!]               
         getModelsByMake(make: String!): [ModelYear!]  
         getVehicleByMakeAndModel(make: String!, model: String!): Vehicle  
+        getAllCars: [Vehicle!]!
     }
 
     extend type Mutation {

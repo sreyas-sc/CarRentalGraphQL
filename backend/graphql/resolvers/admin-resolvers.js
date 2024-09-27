@@ -6,7 +6,6 @@ import { createToken } from '../../utils/createToken.js';
 import Admin from '../../models/admin-model.js';
 import Vehicle from '../../models/vehicle-model.js';
 import RentableVehicle from '../../models/rentable-vehicle-model.js';
-// import { sequelize } from '../../config/database.js'; 
 import sequelize from '../../models/db.js';
 
 const adminResolvers = {
@@ -16,6 +15,16 @@ const adminResolvers = {
         getAllAdmins: async () => {
             return await Admin.findAll();
         },
+
+
+        // Get all the cars(Manufacturer)
+       // Get all the cars with details
+        getAllCars: async () => {
+            return await Vehicle.findAll({
+                attributes: ['id', 'make', 'model', 'year', 'createdAt', 'updatedAt'], // Specify all fields you want to retrieve
+            });
+        },
+
 
         // get all the vehicle makes(brands)
         getAllMakes: async () => {

@@ -16,6 +16,7 @@ class AdminRepo {
     async createvehilce(make, model, year){
         return await Vehicle.create({make, model, year})
     }
+    
 }
 
 module.exports = new AdminRepo();

@@ -21,6 +21,17 @@ export const ADD_VEHICLE_MUTATION = gql`
   }
 `;
 
+export const GET_ALL_VEHICLES_MUTATION = gql`
+  query GetAllVehicles {
+    getAllCars {
+      id
+      make
+      model
+      year
+    }
+  }
+`;
+
 export const GET_ALL_MAKES = gql`
   query GetAllMakes {
     getAllMakes

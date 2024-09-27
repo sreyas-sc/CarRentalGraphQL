@@ -1,4 +1,6 @@
 .container{
+    margin-top: 10px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: column;
     border: 1px solid rgba(20, 114, 222, 0.429);
@@ -80,4 +82,45 @@
     background-color: #6367b455;
     border-color: rgba(255, 255, 255, 0.158);
     box-shadow: 11px 12px 15px 4px rgba(29, 37, 46, 0.482);
+}
+
+
+.vehicleTable {
+  /* padding: 20px; */
+  width: 80%;
+  border-collapse: collapse;
+  /* border-radius: 20px; */
+  margin-top: 20px;
+  margin-bottom: 40px;
+
+}
+
+.vehicleTable th, .vehicleTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.vehicleTable th {
+  background-color: #f2f2f25e;
+}
+
+.vehicleTable tr:nth-child(even) {
+  background-color: #f9f9f92b;
+}
+
+.filterfields{
+  max-width: 100%;
+  min-width: 200px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  padding: 20px;
+  margin-right: 10px;
+  background-color: rgba(132, 144, 158, 0.418);
+}
+
+.filterfields::placeholder {
+  color: #e0d9d9;
+  opacity: 0.8; /* Make sure the placeholder color is not faded (optional) */
 }

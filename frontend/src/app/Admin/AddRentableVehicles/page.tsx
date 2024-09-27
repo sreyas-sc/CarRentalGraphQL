@@ -15,6 +15,7 @@ const AddRentableVehicles = () => {
 
   // States for primary and additional images
   const [primaryImage, setPrimaryImage] = useState<File | null>(null);
+  const [primaryImagePreview, setPrimaryImagePreview] = useState<string | null>(null); // Preview URL for primary image
   const [additionalImages, setAdditionalImages] = useState<File[]>([]);
 
   const [getMakes] = useLazyQuery(GET_ALL_MAKES, {
@@ -66,7 +67,9 @@ const AddRentableVehicles = () => {
   // Handle file change for primary image
   const handlePrimaryImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setPrimaryImage(e.target.files[0]);
+      const file = e.target.files[0];
+      setPrimaryImage(file);
+      setPrimaryImagePreview(URL.createObjectURL(file)); // Generate preview URL
     }
   };
 
@@ -187,10 +190,15 @@ const AddRentableVehicles = () => {
         </div>
 
 
-        {/* Primary Image Picker */}
-        <label>Primary Image:</label>
+         {/* Primary Image Picker */}
+         <label>Primary Image:</label>
         <div className={styles.imagePicker}>
           <input type="file" accept="image/*" onChange={handlePrimaryImageChange} />
+          {primaryImagePreview && (
+            <div className={styles.imagePreview}>
+              <img src={primaryImagePreview} alt="Primary Preview" className={styles.previewImage} />
+            </div>
+          )}
         </div>
 
         {/* Multiple Images Input */}

@@ -4,8 +4,7 @@ import styles from './add-cars.module.css';
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import { useMutation, useQuery } from '@apollo/client';
-import { ADD_VEHICLE_MUTATION } from '@/graphql/mutations';
-import { GET_ALL_VEHICLES_MUTATION } from '@/graphql/mutations';
+import { GET_ALL_VEHICLES_MUTATION, ADD_VEHICLE_MUTATION } from '@/graphql/mutations';
 
 const vehicleMakes = [
   "Toyota", "Honda", "Ford", "Chevrolet", "Nissan", "Hyundai",

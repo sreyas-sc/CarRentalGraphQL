@@ -35,6 +35,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           <Link href="/Admin/AddRentableVehicles" passHref>
             <button className={styles.dashButton}>Add Rentable Vehicles</button>
           </Link>
+          <Link href="/Admin/ViewCars" passHref>
+            <button className={styles.dashButton}>View Vehicles</button>
+          </Link>
           <Link href="/Admin/ViewBookings" passHref>
             <button className={styles.dashButton}>View Bookings</button>
           </Link>

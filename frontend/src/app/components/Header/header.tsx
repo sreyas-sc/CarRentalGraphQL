@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Swal from 'sweetalert2'; // Import SweetAlert2
 
+
 function Navbar() {
   const [isSidebarActive, setSidebarActive] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false); // State to check if user is admin
@@ -94,10 +95,10 @@ function Navbar() {
                   </li>
                 ) : isUser ? (
                   <li className={styles.navLinkLi}>
-                    <Link href="/RentACar" legacyBehavior passHref>
+                    <Link href="/Admin/ViewAllRentable" legacyBehavior passHref>
                       <button className={styles.siginInButton}>Rent a Car</button>
                     </Link>
-                    <Link href="/Profile" legacyBehavior passHref>
+                    <Link href="/User/UserProfile" legacyBehavior passHref>
                       <button className={styles.siginInButton}>Profile</button>
                     </Link>
                     <button onClick={handleLogout} className={styles.logoutButton}>
@@ -106,7 +107,7 @@ function Navbar() {
                   </li>
                 ) : (
                   <li className={styles.navLinkLi}>
-                    <Link href="/Admin/DashBoard" legacyBehavior passHref>
+                    <Link href="/Admin/ViewCars" legacyBehavior passHref>
                       <button className={styles.dashboardButton}>Dashboard</button>
                     </Link>
                     <button onClick={handleLogout} className={styles.logoutButton}>
@@ -127,7 +128,7 @@ function Navbar() {
         <div className={`${styles.sideBar} ${isSidebarActive ? styles.sideBarActive : ""}`}>
           <div>
             <Image
-              src="/icons/Group 1261156498chlose.svg"
+              src="/icons/close.png"
               alt="Close Icon For Side Bar"
               className={styles.closeButtonIcon}
               onClick={handleCloseClick}
@@ -138,15 +139,31 @@ function Navbar() {
 
           <div className={styles.dropNavMenu}>
             {!isAdmin && !isUser ? (
-              <button className={styles.loginSignUpButton}>Login/Sign Up</button>
+              <>
+                <Link href="/Auth/Login" legacyBehavior passHref>
+                  <button className={styles.loginSignUpButton}>Sign in</button>
+                </Link>
+                <Link href="/Auth/Register" legacyBehavior passHref>
+                  <button className={styles.loginSignUpButton}>Sign Up</button>
+                </Link>
+              </>
             ) : isUser ? (
-              <Link href="/RentACar" passHref>
-                <button className={styles.loginSignUpButton}>Rent a Car</button>
-              </Link>
+              <>
+                <Link href="/Admin/ViewAllRentable" legacyBehavior passHref>
+                  <button className={styles.loginSignUpButton}>Rent a Car</button>
+                </Link>
+                <Link href="/User/UserProfile" legacyBehavior passHref>
+                  <button className={styles.loginSignUpButton}>Profile</button>
+                </Link>
+                <button onClick={handleLogout} className={styles.loginSignUpButton}>Logout</button>
+              </>
             ) : (
-              <Link href="/Admin/DashBoard" passHref>
-                <button className={styles.loginSignUpButton}>Dashboard</button>
-              </Link>
+              <>
+                <Link href="/Admin/ViewCars" legacyBehavior passHref>
+                  <button className={styles.loginSignUpButton}>Dashboard</button>
+                </Link>
+                <button onClick={handleLogout} className={styles.loginSignUpButton}>Logout</button>
+              </>
             )}
           </div>
         </div>

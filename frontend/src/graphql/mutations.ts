@@ -10,6 +10,45 @@ export const REGISTER_MUTATION = gql`
   }
 `;
 
+
+export const ADD_RENTABLE_VEHICLE_MUTATION = gql`
+    mutation AddRentableVehicle(
+        $make: String!
+        $model: String!
+        $year: String!
+        $price: Float!
+        $quantity: Int!
+        $description: String
+        $primaryImage: Upload
+        $additionalImages: [Upload]
+    ) {
+        addRentableVehicle(
+            input:{
+              make: $make
+              model: $model
+              year: $year
+              price: $price
+              quantity: $quantity
+              description: $description
+              
+            }
+            primaryImage: $primaryImage
+            additionalImages: $additionalImages
+        ) {
+            id
+            make
+            model
+            year
+            price
+            quantity
+            description
+            primaryImageUrl
+            additionalImageUrls
+        }
+    }
+`;
+
+
 export const ADD_VEHICLE_MUTATION = gql`
   mutation AddVehicle($make: String!, $model: String!, $year: String!) {
     addVehicle(make: $make, model: $model, year: $year) {
@@ -21,6 +60,44 @@ export const ADD_VEHICLE_MUTATION = gql`
   }
 `;
 
+
+export const UPDATE_RENTABLE_VEHICLE = gql`
+  mutation updateRentableVehicle(
+      $id: ID
+      $make: String!
+      $model: String!
+      $year: String!
+      $price: Float!
+      $quantity: Int!
+      $description: String
+      $primaryImage: Upload
+      $additionalImages: [Upload]
+  ) {
+    updateRentableVehicle(
+      id: $id,
+      make: $make,
+      model: $model,
+      year: $year,
+      price: $price,
+      quantity: $quantity,
+      description: $description,
+      primaryImage: $primaryImage
+      additionalImages: $additionalImages
+    ) {
+      
+      make
+      model
+      year
+      price
+      quantity
+      description
+      primaryImageUrl
+      additionalImageUrls
+    }
+  }
+`;
+
+
 export const GET_ALL_VEHICLES_MUTATION = gql`
   query GetAllVehicles {
     getAllCars {
@@ -28,6 +105,30 @@ export const GET_ALL_VEHICLES_MUTATION = gql`
       make
       model
       year
+    }
+  }
+`;
+
+export const GET_RENTABLE_VEHICLES = gql`
+  query {
+    getRentableVehicles {
+      id
+      make
+      model
+      year
+      price
+      quantity
+      primaryImageUrl
+      description
+    }
+  }
+`;
+
+export const DELETE_RENTABLE_VEHICLE = gql`
+  mutation DeleteRentableVehicle($id: String!) {
+    deleteRentableVehicle(id: $id) {
+      success
+      message
     }
   }
 `;

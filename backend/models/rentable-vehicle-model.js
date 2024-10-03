@@ -29,7 +29,7 @@ const RentableVehicle = sequelize.define('RentableVehicle', {
     },
     description: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     primaryImageUrl: {
         type: DataTypes.STRING,

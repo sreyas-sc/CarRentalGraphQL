@@ -53,6 +53,21 @@ const adminTypeDefs = gql`
         vehicle: RentableVehicle
     }
 
+    type VehicleDetailsById{
+        make: String!
+        model: String!
+        year: String!
+        price: Float!
+        quantity: Int!
+        availability: Int!
+        transmission: String!
+        fuel_type: String!
+        seats: Int!
+        description: String
+        primaryImageUrl: String
+        additionalImageUrls: [String]
+    }
+
     input vehicleInput {
         make: String!
         model: String!
@@ -73,6 +88,8 @@ const adminTypeDefs = gql`
         description: String
     }
 
+
+
     extend type Query {
         getAllAdmins: [Admin]
         getAllVehicles: [Vehicle]
@@ -82,6 +99,7 @@ const adminTypeDefs = gql`
         getVehicleByMakeAndModel(make: String!, model: String!): Vehicle
         getAllCars: [Vehicle!]!
         getRentableVehicles: [RentableVehicle!]!
+        getVehicleDetailsById(id: ID!): VehicleDetailsById
     }
 
     extend type Mutation {

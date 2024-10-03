@@ -69,7 +69,16 @@ const adminResolvers = {
             } catch (error) {
                 throw new Error('Failed to fetch rentable vehicles: ' + error.message);
             }
-        },        
+        },    
+        
+        
+        // Query to get the vehicle details by the id of the vehicle
+        getVehicleDetailsById: async (_, { id }) => {
+            return await RentableVehicle.findOne({  // Use findOne to get a single record
+                attributes: ['make', 'model', 'year', 'price', 'quantity', 'availability', 'transmission', 'fuel_type', 'seats', 'description', 'primaryImageUrl', 'additionalImageUrls'],
+                where: { id }
+            });
+        },
     },
 
     // ***************************Mutations********************

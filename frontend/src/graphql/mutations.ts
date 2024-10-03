@@ -163,3 +163,22 @@ export const GET_MODELS_BY_MAKE = gql`
     }
   }
 `;
+
+export const GET_VEHICLE_DETAILS_BY_ID = gql`
+  query GetVehicleDetailsById($id: ID!) {  
+    getVehicleDetailsById(id: $id) {  
+      make
+      model
+      year
+      price
+      quantity
+      availability
+      transmission
+      fuel_type
+      seats
+      description
+      primaryImageUrl
+      additionalImageUrls
+    }
+  }
+`;

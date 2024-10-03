@@ -66,6 +66,7 @@ const ViewAllCarsPage: React.FC = () => {
   const handleRentNowClick = () => {
     const user = sessionStorage.getItem('user');
     const token = sessionStorage.getItem('token');
+  
     if (!user || !token) {
       // If no user in session storage, prompt to login
       Swal.fire({
@@ -80,15 +81,25 @@ const ViewAllCarsPage: React.FC = () => {
           router.push("/Auth/Login"); // Navigate to login page
         }
       });
+    } else if (selectedVehicle) {
+      // Ensure selectedVehicle is not null
+      const queryParams = new URLSearchParams({
+        id: selectedVehicle.id,
+      });
+  
+      router.push(`/User/BookCar?${queryParams.toString()}`); 
     } else {
-      // Handle rent functionality here (e.g., proceed to checkout)
       Swal.fire({
-        title: 'Rent Confirmed!',
-        text: 'Your booking request has been received. We will get back to you shortly.',
-        icon: 'success',
+        title: 'Error',
+        text: 'Selected vehicle is not available.',
+        icon: 'error',
       });
     }
   };
+  
+
+  
+  
 
   const filteredAndSortedVehicles = vehicles
     .filter(vehicle =>
@@ -113,7 +124,8 @@ const ViewAllCarsPage: React.FC = () => {
     });
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <div className={styles.loaderContainer}><div className={styles.loader}></div></div>;
+  console.log('Loading:', loading);
   if (error) return <p>Error: {error.message}</p>;
 
   return (
@@ -145,6 +157,7 @@ const ViewAllCarsPage: React.FC = () => {
                 min="0"
                 max="10000"
                 step="100"
+                className={styles.slider}
                 value={priceRange[0]}
                 onChange={(e) => handlePriceChange(e, 0)}
               />

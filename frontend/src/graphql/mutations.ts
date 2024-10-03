@@ -18,6 +18,10 @@ export const ADD_RENTABLE_VEHICLE_MUTATION = gql`
         $year: String!
         $price: Float!
         $quantity: Int!
+        $availability: Int!
+        $transmission:  String!
+        $fuel_type: String!
+        $seats: Int!
         $description: String
         $primaryImage: Upload
         $additionalImages: [Upload]
@@ -29,6 +33,10 @@ export const ADD_RENTABLE_VEHICLE_MUTATION = gql`
               year: $year
               price: $price
               quantity: $quantity
+              availability: $availability
+              transmission: $transmission
+              fuel_type: $fuel_type
+              seats:  $seats
               description: $description
               
             }
@@ -41,6 +49,10 @@ export const ADD_RENTABLE_VEHICLE_MUTATION = gql`
             year
             price
             quantity
+            availability
+            transmission
+            fuel_type
+            seats
             description
             primaryImageUrl
             additionalImageUrls
@@ -118,6 +130,10 @@ export const GET_RENTABLE_VEHICLES = gql`
       year
       price
       quantity
+      availability
+      transmission
+      fuel_type
+      seats
       primaryImageUrl
       description
     }

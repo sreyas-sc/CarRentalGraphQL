@@ -86,69 +86,10 @@ const adminResolvers = {
             return await Vehicle.create({ make, model, year });
         },
 
-        // mutation to add vechicles that can be rented by the user
-        // addRentableVehicle: async (_, {input, primaryImage, additionalImages }) => {
-        //     try {
-        //         const { make, model, year, price, quantity, description } = input;
-
-        //         console.log("input is", input);
-
-        //         const bucketName = "carrental";
-        //         const bucketExists = await minioClient.bucketExists(bucketName);
-        //         if (!bucketExists) {
-        //             throw new Error(`Bucket ${bucketName} does not exist.`);
-        //         }
-
-        //         // Ensure uploads directory exists
-        //         const uploadsDir = path.join(__dirname, '..', 'uploads');
-        //         if (!existsSync(uploadsDir)) {
-        //             mkdirSync(uploadsDir, { recursive: true });
-        //         }
-
-        //         const uploadFile = async (file) => {
-        //             const { createReadStream, filename } = await file;
-        //             const filePath = path.join(uploadsDir, filename); 
-        //             const stream = createReadStream();
-        //             const writeStream = createWriteStream(filePath);
-        //             stream.pipe(writeStream);
-
-        //             return await uploadToMinio(filePath, filename); // Upload to MinIO
-        //         };
-
-        //         // Check if primary image is provided and upload it
-        //         let uploadedPrimaryImageUrl = '';
-        //         if (primaryImage) {
-        //             uploadedPrimaryImageUrl = await uploadFile(primaryImage);
-        //         }
-
-        //         // Upload additional images only if they are provided
-        //         let uploadedAdditionalImageUrls = [];
-        //         if (additionalImages && additionalImages.length > 0) {
-        //             uploadedAdditionalImageUrls = await Promise.all(
-        //                 additionalImages.map((image) => uploadFile(image))
-        //             );
-        //         }
-
-        //         const vehicle = await RentableVehicle.create({
-        //             make,
-        //             model,
-        //             year,
-        //             price,
-        //             quantity,
-        //             description,
-        //             primaryImageUrl: uploadedPrimaryImageUrl,
-        //             additionalImageUrls: uploadedAdditionalImageUrls,
-        //         });
-
-        //         return vehicle; // Consider returning a simplified object if necessary
-        //     } catch (error) {
-        //         console.error('Error adding rentable vehicle:', error.message);
-        //         throw new Error(`Failed to add rentable vehicle: ${error.message}`);
-        //     }
-        // },
+     
         addRentableVehicle: async (_, { input, primaryImage, additionalImages }) => {
             try {
-                const { make, model, year, price, quantity, description } = input;
+                const { make, model, year, price, quantity, availability, transmission, fuel_type, seats, description } = input;
         
                 // Log the input object
                 console.log("Input is:", JSON.stringify(input, null, 2));
@@ -195,7 +136,11 @@ const adminResolvers = {
                     year,
                     price,
                     quantity,
+                    availability,
                     description,
+                    transmission,
+                    fuel_type,
+                    seats,
                     primaryImageUrl: uploadedPrimaryImageUrl,
                     additionalImageUrls: uploadedAdditionalImageUrls,
                 });
@@ -226,132 +171,6 @@ const adminResolvers = {
             }
         },
 
-        
-        
-            //     _,
-            //     { id, make, model, year, price, quantity, description, primaryImage, additionalImages },
-            //     { dataSources }
-            //   ) => {
-            //     try {
-            //       // Find the vehicle by ID
-            //       const vehicle = await RentableVehicle.findByPk(id);
-            //       if (!vehicle) throw new Error('Vehicle not found.');
-          
-            //       // Prepare the input object for updates
-            //       const input = { make, model, year, price, quantity, description };
-          
-            //       // If images are provided, upload them to MinIO
-            //       const uploadsDir = path.join(__dirname, '..', 'uploads');
-            //       if (!existsSync(uploadsDir)) mkdirSync(uploadsDir, { recursive: true });
-          
-            //       const uploadFile = async (file) => {
-            //         const { createReadStream, filename } = await file;
-            //         const filePath = path.join(uploadsDir, filename);
-            //         const stream = createReadStream();
-            //         const writeStream = createWriteStream(filePath);
-            //         stream.pipe(writeStream);
-          
-            //         return await uploadToMinio(filePath, filename);
-            //       };
-          
-            //       // Upload primary image if provided
-            //       if (primaryImage) {
-            //         const uploadedPrimaryImageUrl = await uploadFile(primaryImage);
-            //         input.primaryImageUrl = uploadedPrimaryImageUrl;
-            //       }
-          
-            //       // Upload additional images if provided
-            //       if (additionalImages && additionalImages.length > 0) {
-            //         const uploadedAdditionalImageUrls = await Promise.all(
-            //           additionalImages.map((image) => uploadFile(image))
-            //         );
-            //         input.additionalImageUrls = uploadedAdditionalImageUrls;
-            //       }
-          
-            //       // Update vehicle details
-            //       await vehicle.update(input);
-                  
-            //       // Fetch the updated vehicle data
-            //       const updatedVehicle = await RentableVehicle.findByPk(id);
-                  
-            //       // Return the updated vehicle with success message
-            //       return {
-            //         success: true,
-            //         message: 'Vehicle updated successfully.',
-            //         vehicle: updatedVehicle // Ensure the vehicle object includes the `id` and other fields required by the GraphQL schema
-            //       };
-            //     } catch (error) {
-            //       console.error('Error updating vehicle:', error.message);
-            //       throw new Error(`Failed to update vehicle: ${error.message}`); // Throw error to be handled by GraphQL
-            //     }
-            //   },
-           
-          
-        
-        
-        // Mutation for admin login
-        
-        // updateRentableVehicle: async (
-        //     _,
-        //     { id, make, model, year, price, quantity, description, primaryImage, additionalImages }
-        // ) => {
-        //     try {
-        //         // Find the vehicle by ID
-        //         const vehicle = await RentableVehicle.findByPk(id);
-        //         if (!vehicle) throw new Error('Vehicle not found.');
-        
-        //         // Prepare the input object for updates
-        //         const input = { make, model, year, price, quantity, description };
-        
-        //         // If images are provided, upload them to MinIO
-        //         const uploadsDir = path.join(__dirname, '..', 'uploads');
-        //         if (!existsSync(uploadsDir)) mkdirSync(uploadsDir, { recursive: true });
-        
-        //         const uploadFile = async (file) => {
-        //             const { createReadStream, filename } = await file;
-        //             const filePath = path.join(uploadsDir, filename);
-        //             const stream = createReadStream();
-        //             const writeStream = createWriteStream(filePath);
-        //             stream.pipe(writeStream);
-        
-        //             return await uploadToMinio(filePath, filename);
-        //         };
-        
-        //         // Upload primary image if provided
-        //         if (primaryImage) {
-        //             const uploadedPrimaryImageUrl = await uploadFile(primaryImage);
-        //             input.primaryImageUrl = uploadedPrimaryImageUrl;
-        //         }
-        
-        //         // Upload additional images if provided
-        //         if (additionalImages && additionalImages.length > 0) {
-        //             const uploadedAdditionalImageUrls = await Promise.all(
-        //                 additionalImages.map((image) => uploadFile(image))
-        //             );
-        //             input.additionalImageUrls = uploadedAdditionalImageUrls;
-        //         }
-        
-        //         // Update vehicle details
-        //         await vehicle.update(input);
-                
-        //         // Fetch the updated vehicle data
-        //         const updatedVehicle = await RentableVehicle.findByPk(id);
-        
-        //         // Return the updated vehicle with success message
-        //         return {
-        //             success: true,
-        //             message: "Vehicle updated successfully.",
-        //             vehicle: updatedVehicle,
-        //         };
-        //     } catch (error) {
-        //         console.error('Error updating vehicle:', error);
-        //         return {
-        //             success: false,
-        //             message: `Failed to update vehicle: ${error.message}`,
-        //             vehicle: null, // Explicitly return null to avoid non-nullable error
-        //         };
-        //     }
-        // },
         updateRentableVehicle: async (
             _,
             { id, make, model, year, price, quantity, description, primaryImage, additionalImages }

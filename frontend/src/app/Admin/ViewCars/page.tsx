@@ -13,6 +13,10 @@ interface Vehicle {
   year: String;
   price: number;
   quantity: number;
+  availability: number;
+  transmission: String;
+  fuel_type:  String;
+  seats: number;
   primaryImageUrl: string | null;
   description: string;
 }
@@ -62,7 +66,8 @@ const AdminViewCars: React.FC = () => {
     }
   }, [data, loading]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return 
+  <p>Loading...</p>;
   if (error) return <p>Error fetching vehicles: {error.message}</p>;
 
   const handleEdit = (vehicle: Vehicle) => {
@@ -102,7 +107,7 @@ const AdminViewCars: React.FC = () => {
     e.preventDefault();
     if (!selectedVehicle) return;
   
-    const { id, make, model, year, price, quantity, description } = selectedVehicle;   
+    const { id, make, model, year, price, quantity, availability, transmission, fuel_type, seats,  description } = selectedVehicle;   
   
     try {
       console.log("make is", make)
@@ -114,6 +119,10 @@ const AdminViewCars: React.FC = () => {
           year: String(year),  // Ensure year is a number
           price: Number(price),  // Ensure price is a number
           quantity: Number(quantity),  // Ensure quantity is a number
+          availability: Number(availability),
+          transmission: String(transmission),
+          fuel_type: String(fuel_type),
+          seats: Number(seats),
           description,  // New description
         },
         
@@ -184,9 +193,16 @@ const AdminViewCars: React.FC = () => {
               </h2>
               
               <p><strong>Year:</strong> {vehicle.year}</p>
-              <p><strong>Price:</strong> ₹ {vehicle.price}</p>
+              <p><strong>Price:</strong>{vehicle.price}</p>
               <p><strong>Description:</strong> {vehicle.description}</p>
               <p><strong>Quantity:</strong> {vehicle.quantity} </p>
+              <p><strong>Available Quantity:</strong>{vehicle.availability} </p>
+              <p><strong>Transmission Type:</strong>{vehicle.transmission} </p>
+              <p><strong>Fuel Type:</strong>{vehicle.fuel_type} </p>
+              <p><strong>Numnber of Seats:</strong>{vehicle.seats} </p>
+
+
+
               <button
                 className={styles.editButton}
                 onClick={() => handleEdit(vehicle)}

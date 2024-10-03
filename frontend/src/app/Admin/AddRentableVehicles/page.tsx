@@ -13,8 +13,14 @@ const AddRentableVehicles: React.FC = () => {
   const [selectedModel, setSelectedModel] = useState<string>('');
   const [selectedYear, setSelectedYear] = useState<string>('');
   const [quantity, setQuantity] = useState<number>(1);
+  const [availability, setAvailability] = useState<number>(1);
   const [price, setPrice] = useState<number>(0);
   const [description, setDescription] = useState<string>('');
+  const [selectedTransmission, setSelectedTransmission] = useState<string>('');
+  const [selectedFuelType, setSelectedFuelType] = useState<string>('');
+  const [seats, setSeats] = useState<number>(1);
+
+
 
   const [primaryImage, setPrimaryImage] = useState<File | null>(null);
   const [additionalImages, setAdditionalImages] = useState<File[]>([]);
@@ -81,7 +87,11 @@ const AddRentableVehicles: React.FC = () => {
       year: selectedYear,
       price,
       quantity,
+      availability,
       description,
+      transmission: selectedTransmission,
+      fuelType: selectedFuelType,
+      seats,
       primaryImage, // Primary image file object
       additionalImages, // Array of additional image file objects
     };
@@ -95,7 +105,17 @@ const AddRentableVehicles: React.FC = () => {
           year: input.year,
           price: input.price,
           quantity: input.quantity,
+          availability : input.quantity,
           description: input.description,
+          transmission: input.transmission,
+          fuel_type: input.fuelType,
+          _seats: input.seats,
+          get seats() {
+            return this._seats;
+          },
+          set seats(value) {
+            this._seats = value;
+          },
           primaryImage: input.primaryImage,
           additionalImages: input.additionalImages,
         },
@@ -120,6 +140,7 @@ const AddRentableVehicles: React.FC = () => {
 
   const handleQuantityChange = (amount: number) => {
     setQuantity((prev) => Math.max(1, Math.min(10, prev + amount)));
+    setAvailability((prev) => Math.max(1, Math.min(10, prev + amount)));
   };
 
   return (
@@ -186,6 +207,53 @@ const AddRentableVehicles: React.FC = () => {
               ))}
           </select>
         </div>
+
+        {/* Transmission Type Dropdown */}
+      <div>
+        <select
+          name="transmissionType"
+          className={styles.inputfields}
+          value={selectedTransmission}
+          onChange={(e) => setSelectedTransmission(e.target.value)}
+        >
+          <option value="" disabled>
+            Select Transmission Type
+          </option>
+          <option value="Manual">Manual</option>
+          <option value="Automatic">Automatic</option>
+          <option value="Semi-Automatic">Semi-Automatic</option>
+        </select>
+      </div>
+
+      {/* Fuel Type Dropdown */}
+      <div>
+        <select
+          name="fuelType"
+          className={styles.inputfields}
+          value={selectedFuelType}
+          onChange={(e) => setSelectedFuelType(e.target.value)}
+        >
+          <option value="" disabled>
+            Select Fuel Type
+          </option>
+          <option value="Manual">Manual</option>
+          <option value="Automatic">Automatic</option>
+          <option value="Semi-Automatic">Semi-Automatic</option>
+        </select>
+      </div>
+
+      {/* Number of Seats Input */}
+        <div>
+          <input
+            type="number"
+            placeholder="Number of Seats"
+            value={seats}
+            onChange={(e) => setSeats(Number(e.target.value))}
+            min="1"
+            className={styles.inputfields}
+          />
+        </div>
+
 
         {/* Description Textarea */}
         <div>

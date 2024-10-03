@@ -30,6 +30,10 @@ const adminTypeDefs = gql`
         year: String!
         price: Float!
         quantity: Int!
+        availability: Int!
+        transmission: String!
+        fuel_type: String!
+        seats: Int!
         description: String
         primaryImageUrl: String
         additionalImageUrls: [String]
@@ -55,6 +59,7 @@ const adminTypeDefs = gql`
         year: String!
         price: Float!
         quantity: Int!
+        availability: Int!
         description: String
     }
 
@@ -64,6 +69,7 @@ const adminTypeDefs = gql`
         year: String
         price: Float
         quantity: Int
+        availability: Int
         description: String
     }
 
@@ -99,6 +105,7 @@ const adminTypeDefs = gql`
             price: Float,
             description: String,
             quantity: Int
+            availability: Int
             primaryImage: Upload,
             additionalImages: [Upload]
         ): RentableVehicle

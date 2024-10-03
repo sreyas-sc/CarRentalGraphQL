@@ -6,6 +6,11 @@ import styles from './viewallrentables.module.css';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation'; // For navigation to login page
 import Image from 'next/image';
+import { BsFillFuelPumpFill } from "react-icons/bs";
+import { GiGearStickPattern } from "react-icons/gi";
+import { MdAirlineSeatReclineExtra } from 'react-icons/md';
+
+
 
 interface Vehicle {
   id: string;
@@ -16,7 +21,11 @@ interface Vehicle {
   primaryImageUrl: string | null;
   description: string;
   quantity: number;
+  availability: number;
   type: string;
+  transmission:  string;
+  fuel_type: String;
+  seats: number;
 }
 
 interface GetRentableVehiclesResponse {
@@ -154,7 +163,12 @@ const ViewAllCarsPage: React.FC = () => {
       <div className={styles.carsContainer}>
         {filteredAndSortedVehicles.length > 0 ? (
           filteredAndSortedVehicles.map((vehicle) => (
-            <div key={vehicle.id} className={styles.carcard} onClick={() => handleCardClick(vehicle)}>
+            <div
+              key={vehicle.id}
+              className={`${styles.carcard} ${vehicle.availability === 0 ? styles.disabledCard : ''}`}
+              onClick={() => handleCardClick(vehicle)}
+            >
+              {vehicle.availability === 0 && <span className={styles.notAvailableOverlay}>Not Available</span>}
               <img
                 src={vehicle.primaryImageUrl || 'https://via.placeholder.com/300x200'}
                 alt={`${vehicle.make} ${vehicle.model}`}
@@ -162,17 +176,20 @@ const ViewAllCarsPage: React.FC = () => {
               />
               <div className={styles.carInfo}>
                 <h2 className={styles.carName}>{vehicle.make} {vehicle.model}</h2>
-                <p className={styles.carDetails}>Year: {vehicle.year}</p>
                 <p className={styles.carDetails}>Price: ₹{vehicle.price}/day</p>
-                <p className={styles.carDetails}>Available: {vehicle.quantity}</p>
-                <p className={styles.carDetails}>Type: {vehicle.type}</p>
               </div>
-              <button className={styles.rentbutton} onClick={handleRentNowClick}>Rent Now</button>
+              <button
+                className={styles.rentbutton}
+                onClick={handleRentNowClick}
+                disabled={vehicle.availability === 0}
+              >
+                Rent Now
+              </button>
             </div>
           ))
         ) : (
           <div className={styles.noResultsContainer}>
-            <Image src="/banners/search-not_found.jpg" alt="No Results Found" width={"500"}  height={"400"} className={styles.noResultsImage} />
+            <Image src="/banners/search-not_found.jpg" alt="No Results Found" width={"500"} height={"400"} className={styles.noResultsImage} />
             <p className={styles.noResultsText}>No results found. Please try adjusting your filters.</p>
           </div>
         )}
@@ -186,12 +203,19 @@ const ViewAllCarsPage: React.FC = () => {
               alt={`${selectedVehicle.make} ${selectedVehicle.model}`}
               className={styles.popupImage}
             />
-            <h2>{selectedVehicle.make} {selectedVehicle.model}</h2>
-            <p><strong>Year:</strong> {selectedVehicle.year}</p>
+            <h2>{selectedVehicle.make} {selectedVehicle.model} {selectedVehicle.year}</h2>
+            {/* <p><strong>Year:</strong> {selectedVehicle.year}</p> */}
             <p><strong>Price:</strong> ₹{selectedVehicle.price}/day</p>
-            <p><strong>Available:</strong> {selectedVehicle.quantity}</p>
-            <p><strong>Description:</strong> {selectedVehicle.description}</p>
-            <button className={styles.rentButton} onClick={handleRentNowClick}>Rent Now</button>
+            <p><strong>Available:</strong> {selectedVehicle.availability}</p>
+            <div className={styles.popupdetailscontainer}>
+              <p><strong><GiGearStickPattern/></strong> {selectedVehicle.transmission}</p>
+              <p><strong><BsFillFuelPumpFill/></strong> {selectedVehicle.fuel_type}</p>
+              <p><strong><MdAirlineSeatReclineExtra /></strong> {selectedVehicle.seats}</p>
+            </div>
+            <div className={styles.descriptionContainer}>
+              <p>{selectedVehicle.description}</p>
+            </div>
+              <button className={styles.rentButton} onClick={handleRentNowClick}>Rent Now</button>
           </div>
         </div>
       )}

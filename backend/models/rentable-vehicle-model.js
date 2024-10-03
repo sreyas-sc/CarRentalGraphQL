@@ -27,6 +27,22 @@ const RentableVehicle = sequelize.define('RentableVehicle', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+    availability: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    transmission: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    fuel_type: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    seats: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
     description: {
         type: DataTypes.STRING,
         allowNull: true,

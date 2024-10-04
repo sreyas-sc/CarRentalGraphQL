@@ -55,11 +55,11 @@
 }
 
 .dateInput { /* Added local class for date inputs */
-    padding: 10px;
     color: #333;
     border: 1px solid #000000;
-    background-color: #a7a6a65a;
-    border-radius: 4px;
+    border-radius: 15px;
+    padding: 10px 25px;
+    background-color: #6868685a;
     margin-bottom: 15px;
     font-size: 16px;
 }

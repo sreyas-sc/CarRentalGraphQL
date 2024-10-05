@@ -19,6 +19,7 @@ interface Vehicle {
 }
 
 interface User {
+  id: string,
   phone: string;
   email: string;
   name: string;
@@ -97,8 +98,8 @@ const Booking: React.FC = () => {
 
       await addBooking({
         variables: {
-          vehicleId: vehicleId.toString(), 
-          userId: user.phone.toString(),
+          vehicleId: parseInt(vehicleId), 
+          userId: parseInt(user.id),
           startDate: fromDate.toString(),
           endDate: toDate.toString(),
           status: "booked",

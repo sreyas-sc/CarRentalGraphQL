@@ -63,8 +63,8 @@ export const ADD_RENTABLE_VEHICLE_MUTATION = gql`
 
 export const ADD_BOOKING_MUTATION = gql`
   mutation AddBooking(
-  $vehicleId: String!,
-  $userId: String!,
+  $vehicleId: Int!,
+  $userId: Int!,
   $startDate: String!,
   $endDate: String!,
   $status: String!,
@@ -149,6 +149,20 @@ export const GET_ALL_VEHICLES_MUTATION = gql`
       make
       model
       year
+    }
+  }
+`;
+
+export const GET_BOOKINGS = gql`
+  query GetBookings {
+    getBookings {
+      id
+      vehicleId
+      userId
+      startDate
+      endDate
+      status
+      totalPrice
     }
   }
 `;

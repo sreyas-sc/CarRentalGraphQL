@@ -89,8 +89,8 @@ const adminTypeDefs = gql`
     }
 
     input BookingInput {
-        vehicleId: String!
-        userId: String!
+        vehicleId: Int!
+        userId: Int!
         startDate: String!
         endDate: String!
         status: String!
@@ -105,12 +105,12 @@ const adminTypeDefs = gql`
 
     type Booking {
         id: ID!
-        vehicleId: String!
-        userId: String!
+        vehicleId: Int!
+        userId: Int!
         startDate: String!
         endDate: String!
         status: String!
-        totalPrice: Float!
+        totalPrice: String!
     }
 
     extend type Query {
@@ -123,6 +123,7 @@ const adminTypeDefs = gql`
         getAllCars: [Vehicle!]!
         getRentableVehicles: [RentableVehicle!]!
         getVehicleDetailsById(id: ID!): VehicleDetailsById
+        getBookings: [Booking]
     }
 
     extend type Mutation {

@@ -80,6 +80,15 @@ const adminResolvers = {
                 where: { id }
             });
         },
+
+        getBookings: async () => {
+            try {
+              const bookings = await Booking.findAll();
+              return bookings;
+            } catch (error) {
+              throw new Error('Failed to fetch bookings: ' + error.message);
+            }
+          },
     },
 
     // ***************************Mutations********************

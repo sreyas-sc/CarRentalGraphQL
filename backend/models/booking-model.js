@@ -1,6 +1,53 @@
+// // models/booking-model.js
+// import { DataTypes } from 'sequelize';
+// import sequelize from './db.js'; // Ensure you have your sequelize instance imported
+
+// const Booking = sequelize.define('Booking', {
+//     id: {
+//         type: DataTypes.INTEGER,
+//         autoIncrement: true,
+//         primaryKey: true,
+//     },
+//     vehicleId: {
+//         type: DataTypes.STRING,
+//         allowNull: false,
+//     },
+//     userId: {
+//         type: DataTypes.STRING,
+//         allowNull: false,
+//     },
+//     startDate: {
+//         type: DataTypes.STRING,
+//         allowNull: false,
+//     },
+//     endDate: {
+//         type: DataTypes.STRING,
+//         allowNull: false,
+//     },
+//     status:{
+//         type: DataTypes.STRING,
+//         allowNull:  false,
+//     },
+//     totalPrice: {
+//         type: DataTypes.STRING,
+//         allowNull: false,
+//     },
+// }
+// );
+
+// const syncBookingsTable = async () => {
+//     await Booking.sync(); // This creates the table if it doesn't exist
+// };
+
+// syncBookingsTable(); 
+
+// // Export the Booking model
+// export default Booking;
 // models/booking-model.js
 import { DataTypes } from 'sequelize';
 import sequelize from './db.js'; // Ensure you have your sequelize instance imported
+import Vehicle from './vehicle-model.js';
+import User from './user-model.js';
 
 const Booking = sequelize.define('Booking', {
     id: {
@@ -9,12 +56,20 @@ const Booking = sequelize.define('Booking', {
         primaryKey: true,
     },
     vehicleId: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER, // Change to INTEGER if Vehicle ID is an integer
         allowNull: false,
+        references: {
+            model: Vehicle,
+            key: 'id',
+        },
     },
     userId: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER, // Change to INTEGER if User ID is an integer
         allowNull: false,
+        references: {
+            model: User,
+            key: 'id',
+        },
     },
     startDate: {
         type: DataTypes.STRING,
@@ -24,19 +79,26 @@ const Booking = sequelize.define('Booking', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    status:{
+    status: {
         type: DataTypes.STRING,
-        allowNull:  false,
+        allowNull: false,
     },
     totalPrice: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-}
-);
+});
+
+// Define associations
+Booking.belongsTo(Vehicle, { foreignKey: 'vehicleId' });
+Booking.belongsTo(User, { foreignKey: 'userId' });
 
 const syncBookingsTable = async () => {
-    await Booking.sync(); // This creates the table if it doesn't exist
+    try {
+        await Booking.sync(); // This creates the table if it doesn't exist
+    } catch (error) {
+        console.error('Error syncing vehicle table:', error);
+    }
 };
 
 syncBookingsTable(); 

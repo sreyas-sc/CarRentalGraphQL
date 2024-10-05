@@ -36,7 +36,7 @@ const vehicleTypes = ['All', 'SUV', 'Sedan', 'MUV', 'Hatchback', 'Luxury'];
 const sortOptions = ['Price: Low to High', 'Price: High to Low', 'Type'];
 
 const ViewAllCarsPage: React.FC = () => {
-  // const { loading, error, data } = useQuery<GetRentableVehiclesResponse>(GET_RENTABLE_VEHICLES);
+  const { loading, error, data } = useQuery<GetRentableVehiclesResponse>(GET_RENTABLE_VEHICLES);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [filter, setFilter] = useState('');
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
@@ -44,38 +44,6 @@ const ViewAllCarsPage: React.FC = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
   const [sortBy, setSortBy] = useState('');
   const router = useRouter(); // Router for navigation
-
-
-  // From and to date for showing the user only the available cars on the selected dates
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
-
-
-  // Open a popup to get date range
-  useEffect(() => {
-    Swal.fire({
-      title: 'Select Booking Dates',
-      html:
-        '<label>From: <input type="date" id="from-date" class="swal2-input"></label>' +
-        '<label>To: <input type="date" id="to-date" class="swal2-input"></label>',
-      preConfirm: () => {
-        const fromDate = (document.getElementById('from-date') as HTMLInputElement).value;
-        const toDate = (document.getElementById('to-date') as HTMLInputElement).value;
-        if (!fromDate || !toDate) {
-          Swal.showValidationMessage('Both dates are required!');
-          return;
-        }
-        setFromDate(fromDate);
-        setToDate(toDate);
-      },
-    });
-  }, []);
-
-
-  const { loading, error, data } = useQuery(GET_RENTABLE_VEHICLES, {
-    variables: { fromDate, toDate },
-    skip: !fromDate || !toDate, // Skip query until dates are set
-  });
 
   useEffect(() => {
     if (!loading && data?.getRentableVehicles) {

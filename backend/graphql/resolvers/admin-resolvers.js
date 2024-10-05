@@ -7,6 +7,7 @@ import sequelize from '../../models/db.js';
 import minioClient from '../../config/minioClient.js';
 import { createWriteStream, mkdirSync, existsSync } from 'fs';
 import path from 'path';
+import Booking from '../../models/booking-model.js';
 import { GraphQLUpload } from 'graphql-upload';
 
 // Workaround to get __dirname in ESM
@@ -95,6 +96,38 @@ const adminResolvers = {
             return await Vehicle.create({ make, model, year });
         },
 
+        addBooking: async (_, { input }) => {
+            console.log("!!!!!!!!!!!")
+            console.log(input)
+            try {
+                console.log("Received booking input:", JSON.stringify(input, null, 2)); // Log the input
+                
+                // Validate input structure
+                const { vehicleId, userId, startDate, endDate, status, totalPrice } = input;
+                if (!vehicleId || !userId || !startDate || !endDate || !status || !totalPrice) {
+                    throw new Error("Missing required fields");
+                }
+        
+                // Create the booking record in the database
+                const booking = await Booking.create({
+                    vehicleId: vehicleId,
+                    userId: userId,
+                    startDate: startDate,
+                    endDate: endDate,
+                    status: status,
+                    totalPrice: totalPrice
+                  });
+                                
+                console.log("Booking created:", booking); // Log the created booking
+                
+                return booking; // Return the created booking
+            } catch (error) {
+                console.error('Error adding booking:', error); // Log any errors
+                throw new Error(`Failed to add booking: ${error.message}`);
+            }
+        },
+              
+        
      
         addRentableVehicle: async (_, { input, primaryImage, additionalImages }) => {
             try {
@@ -267,3 +300,6 @@ const adminResolvers = {
 };
 
 export default adminResolvers;
+
+
+

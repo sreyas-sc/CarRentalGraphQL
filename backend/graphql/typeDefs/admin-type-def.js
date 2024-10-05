@@ -88,7 +88,30 @@ const adminTypeDefs = gql`
         description: String
     }
 
+    input BookingInput {
+        vehicleId: String!
+        userId: String!
+        startDate: String!
+        endDate: String!
+        status: String!
+        totalPrice: String!
+    }
 
+    type AddBookingResponse {
+        success: Boolean!
+        message: String!
+        booking: Booking
+    }
+
+    type Booking {
+        id: ID!
+        vehicleId: String!
+        userId: String!
+        startDate: String!
+        endDate: String!
+        status: String!
+        totalPrice: Float!
+    }
 
     extend type Query {
         getAllAdmins: [Admin]
@@ -129,6 +152,8 @@ const adminTypeDefs = gql`
         ): RentableVehicle
 
         deleteRentableVehicle(id: String!): DeleteResponse!
+
+         addBooking(input: BookingInput!): Booking
     }
 
     type DeleteResponse {

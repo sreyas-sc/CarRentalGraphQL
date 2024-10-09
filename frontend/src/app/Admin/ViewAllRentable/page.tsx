@@ -9,6 +9,14 @@ import Image from 'next/image';
 import { BsFillFuelPumpFill } from "react-icons/bs";
 import { GiGearStickPattern } from "react-icons/gi";
 import { MdAirlineSeatReclineExtra } from 'react-icons/md';
+import { DatePicker, Space } from 'antd';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+
+
+dayjs.extend(customParseFormat);
+const { RangePicker } = DatePicker;
 
 interface Vehicle {
   id: string;
@@ -38,6 +46,8 @@ const ViewAllCarsPage: React.FC = () => {
   const [sortBy, setSortBy] = useState('');
   const [fetchAvailableCars, { loading, error, data }] = useLazyQuery<GetAvailableCarsResponse>(GET_AVAILABLE_CARS);
   const router = useRouter();
+  const [dateRange, setDateRange] = useState<[dayjs.Dayjs | null, dayjs.Dayjs | null] | null>(null);
+
 
   const [selectedStartDate, setSelectedStartDate] = useState('');
   const [selectedEndDate, setSelectedEndDate] = useState('');
@@ -86,7 +96,7 @@ const ViewAllCarsPage: React.FC = () => {
   const handleRentNowClick = () => {
     const user = sessionStorage.getItem('user');
     const token = sessionStorage.getItem('token');
-
+  
     if (!user || !token) {
       Swal.fire({
         title: 'Login Required',
@@ -100,21 +110,29 @@ const ViewAllCarsPage: React.FC = () => {
           router.push("/Auth/Login");
         }
       });
-    } else if (selectedVehicle) {
-      const queryParams = new URLSearchParams({ id: selectedVehicle.id });
+    } else if (selectedVehicle && selectedStartDate && selectedEndDate) {
+      const queryParams = new URLSearchParams({
+        id: selectedVehicle.id,
+        fromdate: selectedStartDate,
+        todate: selectedEndDate,
+        amount: selectedVehicle.totalAmount.toString(),
+      });
       router.push(`/User/BookCar?${queryParams.toString()}`);
     } else {
       Swal.fire({
         title: 'Error',
-        text: 'Selected vehicle is not available.',
+        text: 'Please select valid dates and vehicle for booking.',
         icon: 'error',
       });
     }
   };
+  
 
   // Function to handle date submission
   const handleDateSubmit = () => {
-    if (startDate && endDate) {
+    if (dateRange && dateRange[0] && dateRange[1]) {
+      const startDate = dateRange[0].format('YYYY-MM-DD');
+      const endDate = dateRange[1].format('YYYY-MM-DD');
       setSelectedStartDate(startDate);
       setSelectedEndDate(endDate);
       fetchAvailableCars({
@@ -132,8 +150,9 @@ const ViewAllCarsPage: React.FC = () => {
 
 
   const openDatePopup = () => {
-    setStartDate(selectedStartDate);
-    setEndDate(selectedEndDate);
+    if (selectedStartDate && selectedEndDate) {
+      setDateRange([dayjs(selectedStartDate), dayjs(selectedEndDate)]);
+    }
     setShowDatePopup(true);
   };
 
@@ -173,22 +192,17 @@ const ViewAllCarsPage: React.FC = () => {
         <div className={styles.popupOverlay}>
           <div className={styles.popupContent}>
             <h2 className={styles.popupheader}>Select Dates</h2>
-            <p className={styles.fromAndToPtag}>From</p>
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className={styles.dateInput}
-            />
-            <p className={styles.fromAndToPtag}>To</p>
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className={styles.dateInput}
-            />
-            <button onClick={handleDateSubmit} className={styles.dateButton}>View Available Vehicles</button>
-            <button onClick={() => setShowDatePopup(false)} className={styles.closeButton}>Cancel</button>
+            <Space direction="vertical" size={12}>
+              <RangePicker
+                value={dateRange}
+                onChange={(dates) => setDateRange(dates)}
+                format="YYYY-MM-DD"
+              />
+            </Space>
+            <div className={styles.popupButtonContainer}>
+              <button onClick={handleDateSubmit} className={styles.dateButton}>View Available Vehicles</button>
+              <button onClick={() => setShowDatePopup(false)} className={styles.closeButton}>Cancel</button>
+            </div>
           </div>
         </div>
       )}

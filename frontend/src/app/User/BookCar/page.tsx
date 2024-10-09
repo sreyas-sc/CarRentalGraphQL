@@ -5,7 +5,6 @@ import { useQuery, useMutation } from '@apollo/client';
 import { GET_VEHICLE_DETAILS_BY_ID, ADD_BOOKING_MUTATION } from '@/graphql/mutations'; 
 import styles from './book-car.module.css';
 import Swal from 'sweetalert2';
-import { Variable } from 'lucide-react';
 
 // Define types for Vehicle and User
 interface Vehicle {
@@ -36,11 +35,19 @@ const Booking: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
+  const [amount, setAmount] = useState(0);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
+    const fromdate = params.get('fromdate');
+    const todate = params.get('todate');
+    const totalAmount = params.get('amount');
+
     setVehicleId(id);
+    setFromDate(fromdate || '');
+    setToDate(todate || '');
+    setAmount(parseInt(totalAmount || '0'));
 
     // Parse user data from session storage
     const sessionUser: User = JSON.parse(sessionStorage.getItem('user') || 'null');
@@ -72,15 +79,12 @@ const Booking: React.FC = () => {
     },
   });
 
-  // Function to calculate total price
-  const calculateTotalPrice = () => {
-    const totalDays = Math.ceil((new Date(toDate).getTime() - new Date(fromDate).getTime()) / (1000 * 3600 * 24));
-    const pricePerDay = data?.getVehicleDetailsById?.price || 0;
-    return totalDays > 0 ? totalDays * pricePerDay : 0;
+  // Function to calculate total number of days
+  const calculateTotalDays = () => {
+    return Math.ceil((new Date(toDate).getTime() - new Date(fromDate).getTime()) / (1000 * 3600 * 24));
   };
 
   const handleBooking = async () => {
-    // Ensure all fields are filled out correctly
     if (!user || !fromDate || !toDate || !vehicleId) {
       Swal.fire({
         title: 'Missing Information!',
@@ -90,12 +94,7 @@ const Booking: React.FC = () => {
       return;
     }
 
-    // Calculate total price
-    const totalPrice = calculateTotalPrice();
-
     try {
-      
-
       await addBooking({
         variables: {
           vehicleId: parseInt(vehicleId), 
@@ -103,7 +102,7 @@ const Booking: React.FC = () => {
           startDate: fromDate.toString(),
           endDate: toDate.toString(),
           status: "booked",
-          totalPrice: totalPrice.toString(),
+          totalPrice: amount.toString(),
         },        
       });
     } catch (error) {
@@ -114,7 +113,7 @@ const Booking: React.FC = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  const totalPrice = calculateTotalPrice();
+  const totalDays = calculateTotalDays();
 
   return (
     <div className={styles.bookingContainer}>
@@ -129,31 +128,19 @@ const Booking: React.FC = () => {
         <p className={styles.description}><strong>Price:</strong> ₹{data?.getVehicleDetailsById?.price}/day</p>
         <p className={styles.description}>{data?.getVehicleDetailsById?.description}</p>
       </div>
-      <div className={styles.dateSelection}>
-        <label className={styles.label} htmlFor="fromDate">From:</label>
-        <input 
-          type="date" 
-          id="fromDate" 
-          className={styles.dateInput} 
-          value={fromDate} 
-          onChange={(e) => setFromDate(e.target.value)} 
-        />
-        
-        <label className={styles.label} htmlFor="toDate">To:</label>
-        <input 
-          type="date" 
-          id="toDate" 
-          className={styles.dateInput} 
-          value={toDate} 
-          onChange={(e) => setToDate(e.target.value)} 
-        />
+      <div className={styles.detailsContaineSub}>
+      <div className={styles.priceSummary}>
+        <p><strong>Pickup Dtae:</strong> {fromDate}</p>
+        <p><strong>Drop Off Date:</strong> {toDate}</p>
       </div>
-      {fromDate && toDate && (
-        <div className={styles.priceSummary}>
-          <p>Total Days: {Math.ceil((new Date(toDate).getTime() - new Date(fromDate).getTime()) / (1000 * 3600 * 24))}</p>
-          <p>Total Price: ₹{totalPrice}</p>
-        </div>
-      )}
+      <div className={styles.priceSummary2}>
+        <p><strong>Total Days:</strong> {totalDays}</p>
+      </div>
+      <div className={styles.priceSummary3}>
+      <p><strong>Total Price:</strong> ₹{amount}</p>
+      </div>
+      </div>
+      
       <button onClick={handleBooking} className={styles.bookButton}>Book Now</button>
     </div>
   );

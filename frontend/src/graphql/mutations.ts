@@ -249,3 +249,24 @@ export const GET_VEHICLE_DETAILS_BY_ID = gql`
     }
   }
 `;
+
+
+export const GET_BOOKINGS_BY_USER_ID = gql`
+  query GetBookingsByUserId($userId: ID!) { 
+    getBookingsByUserId(userId: $userId) {
+      id
+      startDate
+      endDate
+      status
+      totalPrice
+      user {
+        name
+        email
+      }
+      vehicle {
+        make
+        model
+      }
+    }
+  }
+`;

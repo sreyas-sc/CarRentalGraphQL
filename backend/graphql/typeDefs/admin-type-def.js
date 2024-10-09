@@ -75,6 +75,8 @@ const adminTypeDefs = gql`
         endDate: String!
         status: String!
         totalPrice: String!
+        user: User
+        vehicle: Vehicle
     }
 
     input vehicleInput {
@@ -143,6 +145,7 @@ const adminTypeDefs = gql`
         getRentableVehicles: [RentableVehicle!]!
         getVehicleDetailsById(id: ID!): VehicleDetailsById
         getBookings: [Booking]
+        getBookingsByUserId(userId: ID!): [Booking]
         getAvailableCars(startdate: String!, enddate: String!): [AvailableCar]
     }
 

@@ -10,6 +10,8 @@ import path from 'path';
 import Booking from '../../models/booking-model.js';
 import { GraphQLUpload } from 'graphql-upload';
 import { Op } from 'sequelize';
+import User  from '../../models/user-model.js';
+
 
 
 
@@ -146,7 +148,39 @@ const adminResolvers = {
               throw new Error('Failed to fetch bookings: ' + error.message);
             }
           },
+
+          
+
+          getBookingsByUserId: async (_, { userId }) => {
+            console.log("!!!!!!!!!!!!!!!!!!!!!", userId)
+            try {
+              // Fetch bookings for the specified userId
+              const bookings = await Booking.findAll({ where: { userId } });
+      
+              // Map over the bookings to fetch user and vehicle details
+              const bookingsWithDetails = await Promise.all(
+                bookings.map(async (booking) => {
+                  const user = await User.findByPk(booking.userId); // Assuming you have a User model
+                  const vehicle = await Vehicle.findByPk(booking.vehicleId); // Assuming you have a Vehicle model
+      
+                  return {
+                    ...booking.dataValues, // Spread existing booking properties
+                    user, // Include user details
+                    vehicle, // Include vehicle details
+                  };
+                })
+              );
+      
+              return bookingsWithDetails;
+            } catch (error) {
+              throw new Error('Failed to fetch bookings: ' + error.message);
+            }
+          },
     },
+
+
+    
+      
 
     // ***************************Mutations********************
     Mutation: {

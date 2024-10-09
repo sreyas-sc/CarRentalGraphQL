@@ -9,6 +9,9 @@ import { createWriteStream, mkdirSync, existsSync } from 'fs';
 import path from 'path';
 import Booking from '../../models/booking-model.js';
 import { GraphQLUpload } from 'graphql-upload';
+import { Op } from 'sequelize';
+
+
 
 // Workaround to get __dirname in ESM
 import { fileURLToPath } from 'url';
@@ -71,7 +74,114 @@ const adminResolvers = {
                 throw new Error('Failed to fetch rentable vehicles: ' + error.message);
             }
         },    
+
+
+        // this is the query to fetch the available vehicles for the user based on the user input
+        // async getAvailableCars(_, { startdate, enddate }) {
+        //     console.log("!!!!!!!!!!!!!!!!!!");
+        //     console.log("Requested Date Range:", startdate, enddate);
+        //     try {
+        //       // Step 1: Fetch all cars from the database
+        //       const allCars = await Vehicle.findAll();
+              
+        //       const availableCars = [];
+              
+        //       for (const Vehicle of allCars) {
+        //         // Step 2: Check car availability for the given date range
+        //         const overlappingBookings = await Booking.findAll({
+        //           where: {
+        //             vehicleId: Vehicle.id,
+        //             [Op.or]: [
+        //               {
+        //                 startDate: {
+        //                   [Op.lte]: enddate,
+        //                 },
+        //                 endDate: { // Corrected this line
+        //                   [Op.gte]: startdate,
+        //                 },
+        //               },
+        //               {
+        //                 startDate: { // Corrected this line
+        //                   [Op.gte]: startdate,
+        //                 },
+        //                 endDate: { // Corrected this line
+        //                   [Op.lte]: enddate,
+        //                 },
+        //               },
+        //             ],
+        //           },
+        //         });
+                
+        //         // Step 3: Determine if the car is available
+        //         if (overlappingBookings.length < Vehicle.quantity) {
+        //           availableCars.push(Vehicle);
+        //         }
+        //       }
+          
+        //       // Log available cars
+        //       console.log("Available Cars:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", availableCars);
+          
+        //       // Step 4: Return the list of available cars
+        //       return availableCars;
+        //     } catch (error) {
+        //       console.error('Error fetching available cars:', error);
+        //       throw new Error('Error fetching available cars.');
+        //     }
+        //   },
+          
+        async getAvailableCars(_, { startdate, enddate }) {
+            console.log("!!!!!!!!!!!!!!!!!!");
+            console.log("Requested Date Range:", startdate, enddate);
+            try {
+              // Step 1: Fetch all cars from the RentableVehicle model
+              const allCars = await RentableVehicle.findAll();
+          
+              // Step 2: Fetch bookings that overlap with the requested date range
+              const overlappingBookings = await Booking.findAll({
+                where: {
+                  [Op.or]: [
+                    {
+                      startDate: {
+                        [Op.lte]: enddate,
+                      },
+                      endDate: {
+                        [Op.gte]: startdate,
+                      },
+                    },
+                    {
+                      startDate: {
+                        [Op.gte]: startdate,
+                      },
+                      endDate: {
+                        [Op.lte]: enddate,
+                      },
+                    },
+                  ],
+                },
+              });
+          
+              // Step 3: Create a set of unavailable vehicle IDs
+              const unavailableVehicleIds = new Set(overlappingBookings.map(booking => booking.vehicleId));
+          
+              // Step 4: Filter available vehicles
+              const availableCars = allCars.filter(vehicle => !unavailableVehicleIds.has(vehicle.id));
+          
+              // Log available cars
+              console.log("Available Cars:", availableCars);
+          
+              // Step 5: Return the list of available cars
+              console.log("These are the available cars~~~~~~~~~~~~~~~~~~~~~~~", availableCars)
+              return availableCars;
+              
+            } catch (error) {
+              console.error('Error fetching available cars:', error);
+              throw new Error('Error fetching available cars.');
+            }
+          },
+          
         
+
+
         
         // Query to get the vehicle details by the id of the vehicle
         getVehicleDetailsById: async (_, { id }) => {
@@ -80,6 +190,7 @@ const adminResolvers = {
                 where: { id }
             });
         },
+
 
         getBookings: async () => {
             try {

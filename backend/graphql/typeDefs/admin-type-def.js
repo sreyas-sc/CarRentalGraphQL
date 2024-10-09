@@ -37,7 +37,7 @@ const adminTypeDefs = gql`
         description: String
         primaryImageUrl: String
         additionalImageUrls: [String]
-        createdAt: String!  
+        createdAt: String!
         updatedAt: String!
     }
 
@@ -46,14 +46,13 @@ const adminTypeDefs = gql`
         year: String!
     }
 
-
     type UpdateRentableVehicleResponse {
         success: Boolean!
         message: String!
         vehicle: RentableVehicle
     }
 
-    type VehicleDetailsById{
+    type VehicleDetailsById {
         make: String!
         model: String!
         year: String!
@@ -66,6 +65,16 @@ const adminTypeDefs = gql`
         description: String
         primaryImageUrl: String
         additionalImageUrls: [String]
+    }
+
+    type Booking {
+        id: ID!
+        vehicleId: Int!
+        userId: Int!
+        startDate: String!
+        endDate: String!
+        status: String!
+        totalPrice: String!
     }
 
     input vehicleInput {
@@ -103,14 +112,24 @@ const adminTypeDefs = gql`
         booking: Booking
     }
 
-    type Booking {
+    type DeleteResponse {
+        success: Boolean!
+        message: String!
+    }
+
+    type AvailableCar {
         id: ID!
-        vehicleId: Int!
-        userId: Int!
-        startDate: String!
-        endDate: String!
-        status: String!
-        totalPrice: String!
+        make: String!
+        model: String!
+        year: String!
+        price: Float!
+        availability: Int!
+        transmission: String!
+        fuel_type: String!
+        seats: Int!
+        description: String
+        primaryImageUrl: String
+        additionalImageUrls: [String]
     }
 
     extend type Query {
@@ -124,6 +143,7 @@ const adminTypeDefs = gql`
         getRentableVehicles: [RentableVehicle!]!
         getVehicleDetailsById(id: ID!): VehicleDetailsById
         getBookings: [Booking]
+        getAvailableCars(startdate: String!, enddate: String!): [AvailableCar]
     }
 
     extend type Mutation {
@@ -138,28 +158,20 @@ const adminTypeDefs = gql`
             primaryImage: Upload,
             additionalImages: [Upload]
         ): RentableVehicle!
-
-         updateRentableVehicle(
+        updateRentableVehicle(
             id: ID,
             make: String,
             model: String,
             year: String,
             price: Float,
             description: String,
-            quantity: Int
-            availability: Int
+            quantity: Int,
+            availability: Int,
             primaryImage: Upload,
             additionalImages: [Upload]
         ): RentableVehicle
-
         deleteRentableVehicle(id: String!): DeleteResponse!
-
-         addBooking(input: BookingInput!): Booking
-    }
-
-    type DeleteResponse {
-        success: Boolean!
-        message: String!
+        addBooking(input: BookingInput!): Booking
     }
 `;
 

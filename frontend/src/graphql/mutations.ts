@@ -201,11 +201,32 @@ export const GET_ALL_MAKES = gql`
   }
 `;
 
+
+
 export const GET_MODELS_BY_MAKE = gql`
   query GetModelsByMake($make: String!) {
     getModelsByMake(make: $make) {
       model
       year
+    }
+  }
+`;
+
+export const GET_AVAILABLE_CARS = gql`
+  query GetAvailableCars($startdate: String!, $enddate: String!){
+    getAvailableCars(startdate: $startdate, enddate: $enddate) {
+      id
+      make
+      model
+      year
+      price
+      availability
+      transmission
+      fuel_type
+      seats
+      description
+      primaryImageUrl
+      additionalImageUrls
     }
   }
 `;

@@ -11,8 +11,18 @@ import Booking from '../../models/booking-model.js';
 import { GraphQLUpload } from 'graphql-upload';
 import { Op } from 'sequelize';
 import User  from '../../models/user-model.js';
+import Razorpay from 'razorpay';
+import dotenv from 'dotenv';
+import crypto from 'crypto';
 
 
+dotenv.config();
+
+
+const razorpay = new Razorpay({
+    key_id: process.env.KEY_ID,
+    key_secret: process.env.KEY_SECRET
+  });
 
 
 // Workaround to get __dirname in ESM
@@ -136,18 +146,7 @@ const adminResolvers = {
             });
         },
 
-
-        // getBookings: async () => {
-        //     try {
-        //       const bookings = await Booking.findAll();
-        //       return bookings;
-        //     } catch (error) {
-        //       throw new Error('Failed to fetch bookings: ' + error.message);
-        //     }
-        //   },
-
         getAllBookings: async () => {
-            console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             try {
               const bookings = await Booking.findAll({
                 include: [
@@ -171,7 +170,6 @@ const adminResolvers = {
           
 
           getBookingsByUserId: async (_, { userId }) => {
-            console.log("!!!!!!!!!!!!!!!!!!!!!", userId)
             try {
               // Fetch bookings for the specified userId
               const bookings = await Booking.findAll({ where: { userId } });
@@ -215,37 +213,141 @@ const adminResolvers = {
             return await Vehicle.create({ make, model, year });
         },
 
-        addBooking: async (_, { input }) => {
-            console.log("!!!!!!!!!!!")
-            console.log(input)
+
+        createRazorpayOrder: async (_, { input }) => {
+            const { amount, currency } = input;
+
             try {
-                console.log("Received booking input:", JSON.stringify(input, null, 2)); // Log the input
-                
-                // Validate input structure
-                const { vehicleId, userId, startDate, endDate, status, totalPrice } = input;
-                if (!vehicleId || !userId || !startDate || !endDate || !status || !totalPrice) {
-                    throw new Error("Missing required fields");
-                }
-        
-                // Create the booking record in the database
-                const booking = await Booking.create({
-                    vehicleId: vehicleId,
-                    userId: userId,
-                    startDate: startDate,
-                    endDate: endDate,
-                    status: status,
-                    totalPrice: totalPrice
-                  });
-                                
-                console.log("Booking created:", booking); // Log the created booking
-                
-                return booking; // Return the created booking
+                // Create an order in Razorpay
+                const order = await razorpay.orders.create({
+                    amount: amount, // Amount in paisa
+                    currency: currency,
+                    receipt: `receipt_order_${new Date().getTime()}`, // unique receipt ID
+                });
+
+                // Return the created order
+                return {
+                    id: order.id,
+                    amount: order.amount,
+                    currency: order.currency,
+                };
             } catch (error) {
-                console.error('Error adding booking:', error); // Log any errors
-                throw new Error(`Failed to add booking: ${error.message}`);
+                console.error('Error creating Razorpay order:', error);
+                throw new Error('Failed to create Razorpay order');
             }
         },
+
+        // addBooking: async (_, { input }) => {
+        //     try {
+        //         console.log("Received booking input:", JSON.stringify(input, null, 2)); // Log the input
+                
+        //         // Validate input structure
+        //         const { vehicleId, userId, startDate, endDate, status, totalPrice } = input;
+        //         if (!vehicleId || !userId || !startDate || !endDate || !status || !totalPrice) {
+        //             throw new Error("Missing required fields");
+        //         }
+        
+        //         // Create the booking record in the database
+        //         const booking = await Booking.create({
+        //             vehicleId: vehicleId,
+        //             userId: userId,
+        //             startDate: startDate,
+        //             endDate: endDate,
+        //             status: status,
+        //             totalPrice: totalPrice
+        //           });
+                                
+        //         console.log("Booking created:", booking); // Log the created booking
+                
+        //         return booking; // Return the created booking
+        //     } catch (error) {
+        //         console.error('Error adding booking:', error); // Log any errors
+        //         throw new Error(`Failed to add booking: ${error.message}`);
+        //     }
+        // },
+
+        addBooking: async (_, { input }) => {
+            console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111133",input)
+            console.log("Received booking input:", JSON.stringify(input, null, 2));
+            try {
+              const { 
+                vehicleId, 
+                userId, 
+                startDate, 
+                endDate, 
+                status, 
+                totalPrice, 
+                razorpayPaymentId, 
+                razorpayOrderId, 
+                razorpaySignature 
+              } = input;
+      
+              // Validate input
+              if (!vehicleId || !userId || !startDate || !endDate || !status || !totalPrice || !razorpayPaymentId || !razorpayOrderId || !razorpaySignature) {
+                throw new Error("Missing required fields");
+              }
+      
+              // Verify Razorpay payment
+              const generatedSignature = crypto
+                .createHmac('sha256', process.env.KEY_SECRET)
+                .update(`${razorpayOrderId}|${razorpayPaymentId}`)
+                .digest('hex');
+      
+              if (generatedSignature !== razorpaySignature) {
+                throw new Error('Invalid payment signature');
+              }
+      
+              // Fetch payment details from Razorpay
+              const payment = await razorpay.payments.fetch(razorpayPaymentId);
+      
+              // Verify payment amount and status
+              if (payment.status !== 'captured' || payment.amount !== parseFloat(totalPrice) * 100) {
+                throw new Error('Payment verification failed');
+              }
+      
+              // Check if the vehicle is still available for the selected dates
+            //   const overlappingBookings = await Booking.findAll({
+            //     where: {
+            //       vehicleId,
+            //       [Op.or]: [
+            //         {
+            //           startDate: { [Op.lte]: endDate },
+            //           endDate: { [Op.gte]: startDate }
+            //         },
+            //         {
+            //           startDate: { [Op.between]: [startDate, endDate] }
+            //         },
+            //         {
+            //           endDate: { [Op.between]: [startDate, endDate] }
+            //         }
+            //       ]
+            //     }
+            //   });
+      
+            //   if (overlappingBookings.length > 0) {
+            //     throw new Error('Vehicle is no longer available for the selected dates');
+            //   }
+      
+              // Create the booking record in the database
+              const booking = await Booking.create({
+                vehicleId,
+                userId,
+                startDate,
+                endDate,
+                status,
+                totalPrice,
+                paymentId: razorpayPaymentId,
+                orderId: razorpayOrderId
+              });
+      
+              console.log("Booking created:", booking);
               
+              return booking;
+            } catch (error) {
+              console.error('Error adding booking:', error);
+              throw new Error(`Failed to add booking: ${error.message}`);
+            }
+          },
         
      
         addRentableVehicle: async (_, { input, primaryImage, additionalImages }) => {

@@ -41,6 +41,18 @@ const Booking = sequelize.define('Booking', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    razorpayPaymentId: {
+        type: DataTypes.STRING, // Add this field
+        allowNull: true // or false based on your needs
+    },
+    razorpayOrderId: {
+        type: DataTypes.STRING, // Add this field
+        allowNull: true // or false based on your needs
+    },
+    razorpaySignature: {
+        type: DataTypes.STRING, // Add this field
+        allowNull: true // or false based on your needs
+    }
 });
 
 // Define associations
@@ -59,3 +71,12 @@ syncBookingsTable();
 
 // Export the Booking model
 export default Booking;
+
+
+
+
+
+
+
+
+

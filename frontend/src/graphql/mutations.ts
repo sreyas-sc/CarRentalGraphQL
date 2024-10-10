@@ -69,6 +69,9 @@ export const ADD_BOOKING_MUTATION = gql`
   $endDate: String!,
   $status: String!,
   $totalPrice: String!
+  $razorpayPaymentId: String!,
+  $razorpayOrderId: String!,
+  $razorpaySignature: String!
 ) {
   addBooking(
     input: {
@@ -78,6 +81,9 @@ export const ADD_BOOKING_MUTATION = gql`
       endDate: $endDate,
       status:  $status,
       totalPrice: $totalPrice
+      razorpayPaymentId: $razorpayPaymentId,
+      razorpayOrderId: $razorpayOrderId,
+      razorpaySignature: $razorpaySignature
     }
   ) {
     id
@@ -87,6 +93,9 @@ export const ADD_BOOKING_MUTATION = gql`
     endDate
     status
     totalPrice
+    razorpayPaymentId
+    razorpayOrderId
+    razorpaySignature
   }
 }
 `;
@@ -290,4 +299,15 @@ export const GET_ALL_BOOKINGS = gql`
       }
     }
   }
+`;
+
+
+export const CREATE_RAZORPAY_ORDER = gql`
+ mutation CreateRazorpayOrder($input: CreateRazorpayOrderInput!) {
+  createRazorpayOrder(input: $input) {
+    id
+    amount
+    currency
+  }
+}
 `;

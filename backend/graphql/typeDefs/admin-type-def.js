@@ -75,8 +75,22 @@ const adminTypeDefs = gql`
         endDate: String!
         status: String!
         totalPrice: String!
+        razorpayPaymentId: String  
+        razorpayOrderId: String
+        razorpaySignature: String 
         user: User
         vehicle: Vehicle
+    }
+
+    input CreateRazorpayOrderInput {
+        amount: Int!
+        currency: String!
+    }
+
+    type RazorpayOrderResponse {
+        id: ID!
+        amount: Int!
+        currency: String!
     }
 
     input vehicleInput {
@@ -106,6 +120,9 @@ const adminTypeDefs = gql`
         endDate: String!
         status: String!
         totalPrice: String!
+        razorpayPaymentId: String!
+        razorpayOrderId: String!
+        razorpaySignature: String!
     }
 
     type AddBookingResponse {
@@ -176,6 +193,8 @@ const adminTypeDefs = gql`
         ): RentableVehicle
         deleteRentableVehicle(id: String!): DeleteResponse!
         addBooking(input: BookingInput!): Booking
+        createRazorpayOrder(input: CreateRazorpayOrderInput!): RazorpayOrderResponse!
+
     }
 `;
 

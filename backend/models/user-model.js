@@ -47,6 +47,8 @@ const User = sequelize.define('User', {
     timestamps: true, // To automatically manage createdAt and updatedAt fields
 });
 
+
+
 // Sync the model with the database
 const syncUsersTable = async () => {
     await User.sync(); // This creates the table if it doesn't exist

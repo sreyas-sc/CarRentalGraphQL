@@ -2,8 +2,6 @@
     position: relative; /* Necessary to position the ::before pseudo-element */
     width: 100%;
     min-height: 100vh; /* Full viewport height */
-    background-color: #051C34; /* Fallback background color */
-    background-image: url('/banners/backgroundbmw.png'); /* Path to your background image */
     background-size: contain; /* Control image size */
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* No repeat */

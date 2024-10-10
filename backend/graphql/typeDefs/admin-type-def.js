@@ -144,6 +144,7 @@ const adminTypeDefs = gql`
         getAllCars: [Vehicle!]!
         getRentableVehicles: [RentableVehicle!]!
         getVehicleDetailsById(id: ID!): VehicleDetailsById
+        getAllBookings: [Booking]
         getBookings: [Booking]
         getBookingsByUserId(userId: ID!): [Booking]
         getAvailableCars(startdate: String!, enddate: String!): [AvailableCar]

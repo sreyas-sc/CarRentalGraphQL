@@ -37,12 +37,14 @@
     justify-content :space-between;
     border-bottom: 1px solid #e2e8f0;
   }
+
+  .downloadButton{
+    border: none;
+  }
   .editButton {
     justify-content: center;
     align-items: center;
     text-align: center;
-    /* border-radius: 50%; */
-    /* padding: 5px; */
     background-color: transparent;
     font-size: 20px;
     border: none;
@@ -56,10 +58,26 @@
   
 
   .cardHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     border-radius: 10px 10px 0px 0px;
     background-color: #051C34;
     padding: 1rem;
     border-bottom: 1px solid #e2e8f0;
+  }
+  .excelicon{
+    color: green;
+  }
+
+  .pdficon{
+    color: red;
+  }
+
+  .excelPdfButtonContainer{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
   }
   
   .cardTitle {

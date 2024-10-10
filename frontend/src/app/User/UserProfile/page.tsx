@@ -11,6 +11,9 @@ import jsPDF from 'jspdf';
 // import 'jspdf-autotable';
 import autoTable from 'jspdf-autotable'
 import * as XLSX from 'xlsx'; // For Excel export
+import { FaFilePdf } from "react-icons/fa";
+import { SiMicrosoftexcel } from "react-icons/si";
+
 
 // Define types for the User and Booking data
 interface User {
@@ -179,12 +182,12 @@ const UserProfile: React.FC = () => {
       <div className={styles.bookingsCard}>
         <div className={styles.cardHeader}>
           <h2 className={styles.cardTitle}>Bookings</h2>
-          <div>
-            <Button onClick={downloadPDF} disabled={selectedRowKeys.length === 0}>
-              Download PDF
+          <div className={styles.excelPdfButtonContainer}>
+            <Button onClick={downloadPDF} disabled={selectedRowKeys.length === 0} className={styles.downloadButton}>
+            <FaFilePdf className={styles.pdficon} />Download PDF
             </Button>
-            <Button onClick={downloadExcel} disabled={selectedRowKeys.length === 0}>
-              Download Excel
+            <Button onClick={downloadExcel} disabled={selectedRowKeys.length === 0} className={styles.downloadButton}>
+              <SiMicrosoftexcel className={styles.excelicon} />Download Excel
             </Button>
           </div>
         </div>

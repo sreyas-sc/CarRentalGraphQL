@@ -128,9 +128,6 @@ const adminResolvers = {
           },
           
         
-
-
-        
         // Query to get the vehicle details by the id of the vehicle
         getVehicleDetailsById: async (_, { id }) => {
             return await RentableVehicle.findOne({  // Use findOne to get a single record
@@ -140,15 +137,37 @@ const adminResolvers = {
         },
 
 
-        getBookings: async () => {
+        // getBookings: async () => {
+        //     try {
+        //       const bookings = await Booking.findAll();
+        //       return bookings;
+        //     } catch (error) {
+        //       throw new Error('Failed to fetch bookings: ' + error.message);
+        //     }
+        //   },
+
+        getAllBookings: async () => {
+            console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             try {
-              const bookings = await Booking.findAll();
+              const bookings = await Booking.findAll({
+                include: [
+                  {
+                    model: User,
+                    as: 'user',
+                  },
+                  {
+                    model: Vehicle,
+                    as: 'vehicle',
+                  },
+                ],
+              });
+              console.log('Fetched bookings:', bookings);
               return bookings;
             } catch (error) {
-              throw new Error('Failed to fetch bookings: ' + error.message);
+              console.error(error); // Log the error for better debugging
+              throw new Error(`Failed to fetch bookings: ${error.message}`);
             }
           },
-
           
 
           getBookingsByUserId: async (_, { userId }) => {

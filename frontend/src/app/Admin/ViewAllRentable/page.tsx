@@ -224,35 +224,7 @@ const ViewAllCarsPage: React.FC = () => {
           </select>
         </div>
         
-        {/* Vehicles Display */}
-        {/* <div className={styles.vehiclesContainer}>
-          {filteredAndSortedVehicles.map(vehicle => (
-            <div key={vehicle.id} className={styles.vehicleCard} onClick={() => handleCardClick(vehicle)}>
-              <Image
-                src={vehicle.primaryImageUrl || '/placeholder.png'} // Use a placeholder if no image
-                alt={`${vehicle.make} ${vehicle.model}`}
-                width={300}
-                height={200}
-                className={styles.vehicleImage}
-              />
-              <h2 className={styles.vehicleTitle}>{`${vehicle.make} ${vehicle.model}`}</h2>
-              <p className={styles.vehicleYear}>{vehicle.year}</p>
-              <p className={styles.vehiclePrice}>₹{vehicle.price}/day</p>
-              <div className={styles.vehicleDetails}>
-                <div className={styles.detailItem}>
-                  <BsFillFuelPumpFill /> <span>{vehicle.fuel_type}</span>
-                </div>
-                <div className={styles.detailItem}>
-                  <GiGearStickPattern /> <span>{vehicle.transmission}</span>
-                </div>
-                <div className={styles.detailItem}>
-                  <MdAirlineSeatReclineExtra /> <span>{vehicle.seats} seats</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div> */}
-
+       
         <div className={styles.vehiclesContainer}>
           {filteredAndSortedVehicles.map(vehicle => (
             <div key={vehicle.id} className={styles.vehicleCard} onClick={() => handleCardClick(vehicle)}>

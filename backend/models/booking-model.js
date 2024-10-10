@@ -44,8 +44,8 @@ const Booking = sequelize.define('Booking', {
 });
 
 // Define associations
-Booking.belongsTo(Vehicle, { foreignKey: 'vehicleId' });
-Booking.belongsTo(User, { foreignKey: 'userId' });
+Booking.belongsTo(Vehicle, { foreignKey: 'vehicleId', as: 'vehicle' });
+Booking.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 const syncBookingsTable = async () => {
     try {

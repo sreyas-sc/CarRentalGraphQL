@@ -270,3 +270,24 @@ export const GET_BOOKINGS_BY_USER_ID = gql`
     }
   }
 `;
+
+export const GET_ALL_BOOKINGS = gql`
+  query GetAllBookings {
+    getAllBookings {
+      id
+      startDate
+      endDate
+      status
+      totalPrice
+      vehicle {
+        make
+        model
+      }
+      user {
+        id
+        name
+        email
+      }
+    }
+  }
+`;

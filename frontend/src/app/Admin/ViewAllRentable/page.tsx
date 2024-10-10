@@ -225,6 +225,19 @@ const ViewAllCarsPage: React.FC = () => {
         </div>
         
        
+        {vehicles.length === 0 && !loading && (
+          <div className={styles.noVehiclesContainer}>
+          <Image
+            src="/banners/search-not_found.jpg"
+            width={300}
+            height={300}
+            alt="No cars available"
+            className={styles.noVehiclesImage}
+          />
+          <p className={styles.noVehiclesText}>No vehicles available for the selected dates. Please try different dates.</p>
+        </div>
+        )}
+
         <div className={styles.vehiclesContainer}>
           {filteredAndSortedVehicles.map(vehicle => (
             <div key={vehicle.id} className={styles.vehicleCard} onClick={() => handleCardClick(vehicle)}>

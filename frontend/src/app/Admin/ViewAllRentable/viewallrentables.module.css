@@ -109,8 +109,9 @@
 .searchInput, .sortSelect {
   padding: 10px;
   font-size: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  background-color: #464645;
+  border: 1px solid #dddddd00;
+  border-radius: 20px;
 }
 
 .searchInput {
@@ -382,3 +383,4 @@ font-weight: 700;
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
